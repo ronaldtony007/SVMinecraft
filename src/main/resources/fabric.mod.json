@@ -1,31 +1,30 @@
 {
 	"schemaVersion": 1,
-	"id": "modid",
+	"id": "startermod",
 	"version": "${version}",
-	"name": "Example Mod",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"name": "Starter Mod",
+	"description": "A beginner Fabric mod for Minecraft 26.2.",
 	"authors": [
-		"Me!"
+		"Your Name"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/"
 	},
 	"license": "CC0-1.0",
-	"icon": "assets/modid/icon.png",
+	"icon": "assets/startermod/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
-			"com.example.ExampleMod"
+			"com.example.startermod.StarterMod"
 		],
 		"client": [
-			"com.example.client.ExampleModClient"
+			"com.example.startermod.client.StarterModClient"
 		]
 	},
 	"mixins": [
-		"modid.mixins.json",
+		"startermod.mixins.json",
 		{
-			"config": "modid.client.mixins.json",
+			"config": "startermod.client.mixins.json",
 			"environment": "client"
 		}
 	],

@@ -1,0 +1,29 @@
+{
+  "parent": "minecraft:story/root",
+  "display": {
+    "icon": {
+      "id": "minecraft:stone"
+    },
+    "title": {
+      "text": "Stone Age"
+    },
+    "description": {
+      "text": "Discover stone and teach a Toolsmith how to work with it"
+    },
+    "frame": "task",
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "discover_stone": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:stone"
+          }
+        ]
+      }
+    }
+  }
+}

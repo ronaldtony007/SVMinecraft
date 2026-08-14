@@ -1,0 +1,19 @@
+{
+	"required": true,
+	"package": "com.example.startermod.mixin",
+	"compatibilityLevel": "JAVA_25",
+	"mixins": [
+		"ExampleMixin",
+		"CraftingMenuMixin",
+		"VillagerTradesMixin",
+		"VillagerTradeGateMixin",
+		"VillagerProgressionMixin",
+		"RecipeBookGateMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

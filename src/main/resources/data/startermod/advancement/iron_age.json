@@ -1,0 +1,29 @@
+{
+  "parent": "startermod:stone_age",
+  "display": {
+    "icon": {
+      "id": "minecraft:iron_ingot"
+    },
+    "title": {
+      "text": "Iron Age"
+    },
+    "description": {
+      "text": "Discover iron and teach a Toolsmith how to work with it"
+    },
+    "frame": "task",
+    "announce_to_chat": false,
+    "hidden": false
+  },
+  "criteria": {
+    "discover_iron": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:iron_ingot"
+          }
+        ]
+      }
+    }
+  }
+}

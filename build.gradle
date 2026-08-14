@@ -18,7 +18,7 @@ loom {
 	splitEnvironmentSourceSets()
 
 	mods {
-		"modid" {
+		"startermod" {
 			sourceSet sourceSets.main
 			sourceSet sourceSets.client
 		}
