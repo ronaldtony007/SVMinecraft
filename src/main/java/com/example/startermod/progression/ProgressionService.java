@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
+import net.minecraft.advancements.AdvancementHolder;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.npc.villager.Villager;
@@ -59,7 +60,8 @@ public final class ProgressionService {
 		}
 		if (progress.resourceContribution() == 0) {
 			player.sendSystemMessage(Component.literal(
-					step.materialName() + " required: " + step.requiredAmount() + " (0/" + step.requiredAmount() + ")"));
+					"Provide " + step.requiredAmount() + " " + step.materialName()
+							+ " to upgrade to the next level (0/" + step.requiredAmount() + ")."));
 		}
 		return true;
 	}
@@ -128,11 +130,38 @@ public final class ProgressionService {
 			RecipeProgression.refreshPlayerRecipes(player);
 			player.sendSystemMessage(Component.literal(displayName(step.technologyId()) + " recipes unlocked."));
 		}
+		awardAgeAdvancement(player, step);
 
 		player.sendSystemMessage(Component.literal("The " + displayName(villager) + " advanced to "
 				+ VillagerRankRequirement.levelName(step.toRank()) + "."));
 		requestNextResource(player, villager);
 		return true;
+	}
+
+	private static void awardAgeAdvancement(ServerPlayer player, ProgressionStep step) {
+		String age = switch (step.technologyId().getPath()) {
+			case "stoneworking" -> "stone";
+			case "ironworking" -> "iron";
+			case "diamondworking" -> "diamond";
+			default -> null;
+		};
+		if (age == null) return;
+
+		ServerLevel level = (ServerLevel) player.level();
+		AdvancementHolder root = getAdvancement(level, "villager_progression");
+		if (root != null) {
+			player.getAdvancements().award(root, "progression_started");
+		}
+
+		AdvancementHolder advancement = getAdvancement(level, step.profession() + "_" + age);
+		if (advancement != null) {
+			player.getAdvancements().award(advancement, "complete_progression");
+		}
+	}
+
+	private static AdvancementHolder getAdvancement(ServerLevel level, String name) {
+		return level.getServer().getAdvancements()
+				.get(Identifier.fromNamespaceAndPath("startermod", name));
 	}
 
 	public static void refreshTrades(Villager villager, ServerLevel level) {

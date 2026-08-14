@@ -1,0 +1,13 @@
+{
+  "parent": "startermod:villager_progression",
+  "display": {
+    "icon": { "id": "minecraft:stone" },
+    "title": { "text": "Weaponsmith: Stone Age" },
+    "description": { "text": "Complete Stoneworking with a Weaponsmith" },
+    "frame": "task",
+    "announce_to_chat": true,
+    "show_toast": true,
+    "hidden": false
+  },
+  "criteria": { "complete_progression": { "trigger": "minecraft:impossible" } }
+}

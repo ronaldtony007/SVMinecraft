@@ -8,7 +8,7 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
 
 public final class ProgressionDefinitions {
-	private static final String TOOLSMITH = "toolsmith";
+	private static final Set<String> BLACKSMITH_PROFESSIONS = Set.of("toolsmith", "weaponsmith", "armorer");
 
 	private static final Set<Identifier> STONE_RECIPES = recipes(
 			"stone_sword", "stone_pickaxe", "stone_axe", "stone_shovel", "stone_hoe");
@@ -17,14 +17,16 @@ public final class ProgressionDefinitions {
 	private static final Set<Identifier> DIAMOND_RECIPES = recipes(
 			"diamond_sword", "diamond_pickaxe", "diamond_axe", "diamond_shovel", "diamond_hoe");
 
-	private static final List<ProgressionStep> STEPS = List.of(
-			new ProgressionStep(TechnologyId.STONEWORKING, KnowledgeId.STONEWORKING, TOOLSMITH,
-					1, 2, Items.STONE, "Stone", 32, STONE_RECIPES),
-			new ProgressionStep(TechnologyId.IRONWORKING, KnowledgeId.IRONWORKING, TOOLSMITH,
-					2, 3, Items.IRON_INGOT, "Iron", 32, IRON_RECIPES),
-			new ProgressionStep(TechnologyId.DIAMONDWORKING, KnowledgeId.DIAMONDWORKING, TOOLSMITH,
-					4, 5, Items.DIAMOND, "Diamond", 16, DIAMOND_RECIPES)
-	);
+	private static final List<ProgressionStep> STEPS = BLACKSMITH_PROFESSIONS.stream()
+			.flatMap(profession -> List.of(
+					new ProgressionStep(TechnologyId.STONEWORKING, KnowledgeId.STONEWORKING, profession,
+							1, 2, Items.STONE, "Stone", 32, STONE_RECIPES),
+					new ProgressionStep(TechnologyId.IRONWORKING, KnowledgeId.IRONWORKING, profession,
+							2, 3, Items.IRON_INGOT, "Iron", 32, IRON_RECIPES),
+					new ProgressionStep(TechnologyId.DIAMONDWORKING, KnowledgeId.DIAMONDWORKING, profession,
+							4, 5, Items.DIAMOND, "Diamond", 16, DIAMOND_RECIPES)
+			).stream())
+			.toList();
 
 	private ProgressionDefinitions() {
 	}

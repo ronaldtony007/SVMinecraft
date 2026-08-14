@@ -5,13 +5,10 @@ This is the practical map for the current gameplay loop. Follow the arrows when 
 ## The Loop
 
 ```text
-Player discovers stone
+Player reaches the next blacksmith rank
         |
         v
-data/startermod/advancement/stone_age.json
-        |
-        v
-Player interacts with Toolsmith
+Player interacts with Toolsmith, Weaponsmith, or Armorer
         |
         v
 VillagerMilestoneHandler
@@ -44,9 +41,10 @@ BlacksmithContributionHandler
 ProgressionService.completeScrollUnlock()
         |
         +--> VillagerProgress: unlock next trade rank
-        +--> PlayerProgress: unlock recipe feature
-        +--> RecipeProgression: send recipes to recipe book
-        +--> vanilla villager offers: next tier available
+         +--> PlayerProgress: unlock recipe feature
+         +--> RecipeProgression: send recipes to recipe book
+         +--> data/startermod/advancement/{profession}_{age}.json: award age
+         +--> vanilla villager offers: next tier available
 ```
 
 ## The Important Separation
@@ -64,7 +62,7 @@ Player recipe features
     STONEWORKING_RECIPES, IRONWORKING_RECIPES, DIAMONDWORKING_RECIPES
 ```
 
-The translated scroll is the bridge. A villager can reach a vanilla rank without being allowed to use that rank's trades until the progression step is complete. The player receives recipes only when the matching knowledge is transferred.
+The translated scroll is the bridge. A villager can reach a vanilla rank without being allowed to use that rank's trades until the progression step is complete. The player receives recipes and the matching age advancement only when the translated knowledge is transferred.
 
 ## Where Definitions Live
 
@@ -85,13 +83,12 @@ Do not add interaction code here.
 
 ### `progression/ProgressionDefinitions.java`
 
-The content table. Current Toolsmith definitions are:
+The content table. Current blacksmith definitions are:
 
 | Starting rank | Next rank | Material | Quantity | Player recipes |
 | --- | --- | --- | --- | --- |
 | Novice | Apprentice | Stone | 32 | Stone tools |
 | Apprentice | Journeyman | Iron ingot | 32 | Iron tools |
-| Journeyman | Expert | Iron ingot | 32 | None yet |
 | Expert | Master | Diamond | 16 | Diamond tools |
 
 To add a future profession, add definitions here. The handlers should not need a new `if` branch.
@@ -150,7 +147,7 @@ If a rule must work from a command, interaction, or mixin, put the rule here and
 
 ### `profession/BlacksmithEligibility.java`
 
-Currently identifies Toolsmith, Weaponsmith, and Armorer as eligible blacksmithing professions, and identifies Librarians.
+Identifies Toolsmith, Weaponsmith, and Armorer as eligible blacksmithing professions, and identifies Librarians.
 
 The first definitions use Toolsmith. Later definitions can use other professions without changing the resource/scroll/knowledge mechanism.
 
@@ -236,9 +233,13 @@ Choose the visual texture: paper for the untranslated scroll and book for the tr
 
 Fallback names for the generic item types. Runtime custom names are produced by `ModItems`.
 
-### `data/startermod/advancement/stone_age.json`
+### `data/startermod/advancement/villager_progression.json`
 
-Awards the custom Stone Age advancement when the player obtains Stone. It has no recipe rewards. Stone recipes remain controlled by the villager progression system.
+Root of the Villager Progression advancement tree. It is completed by the first vanilla villager trade or when progression starts through a translated scroll.
+
+### `data/startermod/advancement/{profession}_{age}.json`
+
+The nine profession-specific nodes awarded when a translated Stoneworking, Ironworking, or Diamondworking scroll is handed back to the matching Toolsmith, Weaponsmith, or Armorer. These nodes have no recipe rewards; recipes remain controlled by the villager progression system.
 
 ### `fabric.mod.json`
 

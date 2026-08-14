@@ -1,0 +1,27 @@
+{
+  "parent": "minecraft:story/root",
+  "display": {
+    "icon": {
+      "id": "minecraft:emerald"
+    },
+    "title": {
+      "text": "Villager Progression"
+    },
+    "description": {
+      "text": "What a Deal! Trade with a villager for the first time."
+    },
+    "background": "minecraft:textures/gui/advancements/backgrounds/stone.png",
+    "frame": "task",
+    "announce_to_chat": true,
+    "show_toast": true,
+    "hidden": false
+  },
+  "criteria": {
+    "first_emerald_trade": {
+      "trigger": "minecraft:villager_trade"
+    },
+    "progression_started": {
+      "trigger": "minecraft:impossible"
+    }
+  }
+}
