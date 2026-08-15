@@ -41,6 +41,14 @@ public final class RecipeProgression {
 			case "butcher" -> step.technologyId().equals(TechnologyId.BUTCHER_APPRENTICE)
 					? PlayerFeatureId.BUTCHER_APPRENTICE_FOOD : PlayerFeatureId.BUTCHER_JOURNEYMAN_FOOD;
 			case "fisherman" -> PlayerFeatureId.FISHERMAN_APPRENTICE_FOOD;
+			case "shepherd" -> step.technologyId().equals(TechnologyId.SHEPHERD_COLORED_BEDS)
+					? PlayerFeatureId.SHEPHERD_COLORED_BEDS
+					: step.technologyId().equals(TechnologyId.SHEPHERD_APPRENTICE)
+							? PlayerFeatureId.SHEPHERD_APPRENTICE_DYES
+							: step.technologyId().equals(TechnologyId.SHEPHERD_JOURNEYMAN)
+									? PlayerFeatureId.SHEPHERD_JOURNEYMAN_DYES
+									: step.technologyId().equals(TechnologyId.SHEPHERD_EXPERT)
+											? PlayerFeatureId.SHEPHERD_EXPERT_DYES : PlayerFeatureId.SHEPHERD_MASTER_PAINTING;
 			default -> null;
 		};
 	}

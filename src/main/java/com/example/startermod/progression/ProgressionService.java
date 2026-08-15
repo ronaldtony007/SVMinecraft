@@ -51,6 +51,9 @@ public final class ProgressionService {
 
 	public static boolean requestNextResource(ServerPlayer player, Villager villager) {
 		learnFromRank(player, villager);
+		if (BlacksmithEligibility.isRankOnlyProfession(villager)) {
+			return true;
+		}
 		if (!BlacksmithEligibility.isProgressionEligible(villager)) {
 			return false;
 		}
@@ -78,6 +81,9 @@ public final class ProgressionService {
 	}
 
 	public static boolean contributeResource(ServerPlayer player, Villager villager, Item material, int amount) {
+		if (BlacksmithEligibility.isRankOnlyProfession(villager)) {
+			return false;
+		}
 		Optional<ProgressionStep> next = nextStep(villager);
 		if (next.isEmpty() || !next.get().requirements().containsKey(material)) {
 			return false;
@@ -106,6 +112,9 @@ public final class ProgressionService {
 	}
 
 	public static boolean setResourceContribution(ServerPlayer player, Villager villager, int amount) {
+		if (BlacksmithEligibility.isRankOnlyProfession(villager)) {
+			return false;
+		}
 		Optional<ProgressionStep> next = nextStep(villager);
 		if (next.isEmpty()) {
 			return false;
@@ -114,6 +123,9 @@ public final class ProgressionService {
 	}
 
 	public static boolean setResourceContribution(ServerPlayer player, Villager villager, Item material, int amount) {
+		if (BlacksmithEligibility.isRankOnlyProfession(villager)) {
+			return false;
+		}
 		Optional<ProgressionStep> next = nextStep(villager);
 		if (next.isEmpty() || !next.get().requirements().containsKey(material)) {
 			return false;
@@ -202,6 +214,13 @@ public final class ProgressionService {
 		boolean recipesChanged = false;
 		VillagerProgress villagerProgress = getVillagerProgress(villager);
 		for (ProgressionStep step : ProgressionDefinitions.forProfession(profession)) {
+			if (BlacksmithEligibility.isRankOnlyProfession(villager)
+					&& villager.getVillagerData().level() >= step.toRank()
+					&& !villagerProgress.hasTechnology(step.technologyId())) {
+				villagerProgress = villagerProgress.withKnowledge(step.knowledgeId())
+						.withTechnology(step.technologyId());
+				setVillagerProgress(villager, villagerProgress);
+			}
 			if (!villagerProgress.hasTechnology(step.technologyId())) {
 				continue;
 			}
@@ -278,6 +297,9 @@ public final class ProgressionService {
 	}
 
 	public static boolean unlockTechnology(Villager villager, Identifier technologyId) {
+		if (BlacksmithEligibility.isRankOnlyProfession(villager)) {
+			return false;
+		}
 		Optional<ProgressionStep> step = nextStep(villager);
 		if (step.isEmpty() || !step.get().technologyId().equals(technologyId)) {
 			return false;

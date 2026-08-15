@@ -23,6 +23,11 @@ public final class PlayerFeatureId {
 	public static final Identifier BUTCHER_APPRENTICE_FOOD = StarterMod.id("butcher_apprentice_food");
 	public static final Identifier BUTCHER_JOURNEYMAN_FOOD = StarterMod.id("butcher_journeyman_food");
 	public static final Identifier FISHERMAN_APPRENTICE_FOOD = StarterMod.id("fisherman_apprentice_food");
+	public static final Identifier SHEPHERD_COLORED_BEDS = StarterMod.id("shepherd_colored_beds");
+	public static final Identifier SHEPHERD_APPRENTICE_DYES = StarterMod.id("shepherd_apprentice_dyes");
+	public static final Identifier SHEPHERD_JOURNEYMAN_DYES = StarterMod.id("shepherd_journeyman_dyes");
+	public static final Identifier SHEPHERD_EXPERT_DYES = StarterMod.id("shepherd_expert_dyes");
+	public static final Identifier SHEPHERD_MASTER_PAINTING = StarterMod.id("shepherd_master_painting");
 
 	private PlayerFeatureId() {
 	}

@@ -27,6 +27,8 @@ The same engine applies to Toolsmiths, Weaponsmiths, and Armorers. The first int
 
 Farmers, Butchers, and Fishermen use the same progression engine for gated food recipes. Cooking inputs are checked server-side for furnaces, smokers, and campfires; recipes already in progress are allowed to finish.
 
+Shepherds provide rank-based color knowledge. The vanilla White Bed recipe is always available. The first Shepherd interaction unlocks colored beds, Apprentice unlocks basic dyes, Journeyman unlocks additional dyes, Expert unlocks the remaining dyes and banners, and Master unlocks painting. Shepherd recipes require no resource contributions.
+
 ## Requirements
 
 - JDK 25
@@ -79,5 +81,6 @@ To test the real loop:
 - `RecipeProgression` awards recipes only after the matching feature is granted.
 - `RecipeBookGateMixin` blocks vanilla advancement recipe awards for gated blacksmith recipes.
 - `CraftingMenuMixin` is the final server-side crafting safety check.
+- Shepherd dye, colored-bed, banner, and painting recipes are gated both in the recipe book and in the server-side crafting result.
 
 See `PROGRESSION_FILE_MAP.md` for the file connection map.

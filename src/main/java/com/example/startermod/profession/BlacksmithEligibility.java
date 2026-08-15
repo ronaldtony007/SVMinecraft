@@ -15,6 +15,10 @@ public final class BlacksmithEligibility {
 		return isBlacksmithingProfession(villager) || isFoodProfession(villager);
 	}
 
+	public static boolean isRankOnlyProfession(Villager villager) {
+		return villager.getVillagerData().profession().is(VillagerProfession.SHEPHERD);
+	}
+
 	public static boolean isLibrarian(Villager villager) {
 		return villager.getVillagerData().profession().is(VillagerProfession.LIBRARIAN);
 	}

@@ -34,6 +34,45 @@ public final class ProgressionDefinitions {
 			"golden_helmet", "golden_chestplate", "golden_leggings", "golden_boots", "blast_furnace");
 	private static final Set<Identifier> ARMORER_DIAMOND_RECIPES = recipes(
 			"diamond_helmet", "diamond_chestplate", "diamond_leggings", "diamond_boots");
+	private static final Set<Identifier> SHEPHERD_COLORED_BED_RECIPES = recipes(
+			"black_bed", "blue_bed", "brown_bed", "cyan_bed", "gray_bed", "green_bed",
+			"light_blue_bed", "light_gray_bed", "lime_bed", "magenta_bed", "orange_bed",
+			"pink_bed", "purple_bed", "red_bed", "yellow_bed",
+			"dye_black_bed", "dye_blue_bed", "dye_brown_bed", "dye_cyan_bed", "dye_gray_bed",
+			"dye_green_bed", "dye_light_blue_bed", "dye_light_gray_bed", "dye_lime_bed",
+			"dye_magenta_bed", "dye_orange_bed", "dye_pink_bed", "dye_purple_bed",
+			"dye_red_bed", "dye_yellow_bed");
+	private static final Set<Identifier> SHEPHERD_APPRENTICE_DYE_RECIPES = recipes(
+			"white_dye", "white_dye_from_lily_of_the_valley",
+			"gray_dye", "gray_dye_from_closed_eyeblossom",
+			"black_dye_from_ink_sac", "black_dye_from_wither_rose",
+			"black_dye", "light_blue_dye_from_blue_orchid", "light_blue_dye_from_blue_white_dye",
+			"lime_dye", "lime_dye_from_smelting");
+	private static final Set<Identifier> SHEPHERD_JOURNEYMAN_DYE_RECIPES = recipes(
+			"yellow_dye_from_dandelion", "yellow_dye_from_wildflowers", "yellow_dye_from_golden_dandelion",
+			"yellow_dye_from_sunflower",
+			"light_gray_dye_from_azure_bluet", "light_gray_dye_from_oxeye_daisy",
+			"light_gray_dye_from_white_tulip", "light_gray_dye_from_black_white_dye",
+			"light_gray_dye_from_gray_white_dye", "orange_dye_from_orange_tulip",
+			"orange_dye_from_red_yellow", "orange_dye_from_torchflower",
+			"orange_dye_from_open_eyeblossom",
+			"red_dye_from_poppy", "red_dye_from_beetroot", "red_dye_from_rose_bush",
+			"red_dye_from_tulip", "pink_dye_from_peony", "pink_dye_from_pink_tulip",
+			"pink_dye_from_red_white_dye", "pink_dye_from_cactus_flower", "pink_dye_from_pink_petals");
+	private static final Set<Identifier> SHEPHERD_EXPERT_DYE_RECIPES = recipes(
+			"brown_dye", "purple_dye", "blue_dye", "blue_dye_from_cornflower", "green_dye",
+			"magenta_dye_from_allium", "magenta_dye_from_lilac", "magenta_dye_from_purple_dye",
+			"magenta_dye_from_blue_red_pink", "magenta_dye_from_blue_red_white_dye",
+			"magenta_dye_from_purple_and_pink", "cyan_dye", "cyan_dye_from_pitcher_plant",
+			"white_banner", "orange_banner", "magenta_banner", "light_blue_banner", "yellow_banner",
+			"lime_banner", "pink_banner", "gray_banner", "light_gray_banner", "cyan_banner",
+			"purple_banner", "blue_banner", "brown_banner", "green_banner", "red_banner",
+			"black_banner", "white_banner_duplicate", "orange_banner_duplicate", "magenta_banner_duplicate",
+			"light_blue_banner_duplicate", "yellow_banner_duplicate", "lime_banner_duplicate",
+			"pink_banner_duplicate", "gray_banner_duplicate", "light_gray_banner_duplicate",
+			"cyan_banner_duplicate", "purple_banner_duplicate", "blue_banner_duplicate",
+			"brown_banner_duplicate", "green_banner_duplicate", "red_banner_duplicate", "black_banner_duplicate");
+	private static final Set<Identifier> SHEPHERD_MASTER_RECIPES = recipes("painting");
 
 	private static final List<ProgressionStep> STEPS = java.util.stream.Stream.concat(
 			BLACKSMITH_PROFESSIONS.stream()
@@ -47,7 +86,7 @@ public final class ProgressionDefinitions {
 					new ProgressionStep(TechnologyId.DIAMONDWORKING, KnowledgeId.DIAMONDWORKING, profession,
 							3, 5, Items.DIAMOND, "Diamond", 16, recipesFor(profession, "diamond"))
 			).stream()),
-			foodSteps().stream())
+			java.util.stream.Stream.concat(foodSteps().stream(), shepherdSteps().stream()))
 			.toList();
 
 	private static List<ProgressionStep> foodSteps() {
@@ -87,6 +126,21 @@ public final class ProgressionDefinitions {
 						recipes("dried_kelp", "dried_kelp_from_smelting", "dried_kelp_from_smoking", "dried_kelp_from_campfire_cooking",
 								"cooked_cod", "cooked_cod_from_smoking", "cooked_cod_from_campfire_cooking",
 								"cooked_salmon", "cooked_salmon_from_smoking", "cooked_salmon_from_campfire_cooking"))
+		);
+	}
+
+	private static List<ProgressionStep> shepherdSteps() {
+		return List.of(
+				new ProgressionStep(TechnologyId.SHEPHERD_COLORED_BEDS, KnowledgeId.SHEPHERD_COLORED_BEDS,
+						"shepherd", 1, 1, Items.AIR, "None", 0, SHEPHERD_COLORED_BED_RECIPES),
+				new ProgressionStep(TechnologyId.SHEPHERD_APPRENTICE, KnowledgeId.SHEPHERD_APPRENTICE,
+						"shepherd", 1, 2, Items.AIR, "None", 0, SHEPHERD_APPRENTICE_DYE_RECIPES),
+				new ProgressionStep(TechnologyId.SHEPHERD_JOURNEYMAN, KnowledgeId.SHEPHERD_JOURNEYMAN,
+						"shepherd", 2, 3, Items.AIR, "None", 0, SHEPHERD_JOURNEYMAN_DYE_RECIPES),
+				new ProgressionStep(TechnologyId.SHEPHERD_EXPERT, KnowledgeId.SHEPHERD_EXPERT,
+						"shepherd", 3, 4, Items.AIR, "None", 0, SHEPHERD_EXPERT_DYE_RECIPES),
+				new ProgressionStep(TechnologyId.SHEPHERD_MASTER, KnowledgeId.SHEPHERD_MASTER,
+						"shepherd", 4, 5, Items.AIR, "None", 0, SHEPHERD_MASTER_RECIPES)
 		);
 	}
 

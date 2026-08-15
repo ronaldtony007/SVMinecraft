@@ -15,6 +15,11 @@ public final class KnowledgeId {
 	public static final Identifier BUTCHER_APPRENTICE = StarterMod.id("butcher_apprentice_food");
 	public static final Identifier BUTCHER_JOURNEYMAN = StarterMod.id("butcher_journeyman_food");
 	public static final Identifier FISHERMAN_APPRENTICE = StarterMod.id("fisherman_apprentice_food");
+	public static final Identifier SHEPHERD_COLORED_BEDS = StarterMod.id("shepherd_colored_beds");
+	public static final Identifier SHEPHERD_APPRENTICE = StarterMod.id("shepherd_apprentice_dyes");
+	public static final Identifier SHEPHERD_JOURNEYMAN = StarterMod.id("shepherd_journeyman_dyes");
+	public static final Identifier SHEPHERD_EXPERT = StarterMod.id("shepherd_expert_dyes");
+	public static final Identifier SHEPHERD_MASTER = StarterMod.id("shepherd_master_painting");
 
 	private KnowledgeId() {
 	}
