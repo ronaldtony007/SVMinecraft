@@ -25,8 +25,9 @@ public final class BlacksmithContributionHandler {
 			}
 
 			if (player.getItemInHand(hand).is(ModItems.TRANSLATED_KNOWLEDGE_SCROLL)) {
-				if (!ProgressionService.completeScrollUnlock(serverPlayer, villager)) {
-					serverPlayer.sendSystemMessage(Component.literal("This villager cannot learn from that scroll yet."));
+				ItemStack scroll = player.getItemInHand(hand);
+				if (!ProgressionService.completeScrollUnlock(serverPlayer, villager, scroll)) {
+					serverPlayer.sendSystemMessage(Component.literal("This villager cannot learn that knowledge yet, or already knows it."));
 					return InteractionResult.SUCCESS;
 				}
 

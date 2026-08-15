@@ -1,6 +1,5 @@
 package com.example.startermod.progression;
 
-import java.util.List;
 import java.util.Optional;
 
 import net.minecraft.network.chat.Component;
@@ -10,6 +9,10 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.trading.ItemCost;
+import net.minecraft.world.item.trading.MerchantOffer;
 
 import com.example.startermod.item.ModItems;
 import com.example.startermod.mixin.VillagerTradesMixin;
@@ -38,19 +41,20 @@ public final class ProgressionService {
 	}
 
 	public static Optional<ProgressionStep> nextStep(Villager villager) {
-		syncRankMilestones(villager);
+		syncTradeUnlockWithRank(villager);
 		return ProgressionDefinitions.forVillager(
 				BlacksmithEligibility.professionName(villager), getVillagerProgress(villager).unlockedTradeLevel());
 	}
 
 	public static boolean requestNextResource(ServerPlayer player, Villager villager) {
+		learnFromRank(player, villager);
 		if (!BlacksmithEligibility.isBlacksmithingEligible(villager)) {
 			return false;
 		}
 
 		VillagerProgress progress = getVillagerProgress(villager);
 		Optional<ProgressionStep> next = nextStep(villager);
-		if (next.isEmpty() || progress.pendingScrollRank() != 0) {
+		if (next.isEmpty()) {
 			return false;
 		}
 
@@ -73,10 +77,6 @@ public final class ProgressionService {
 		}
 
 		VillagerProgress progress = getVillagerProgress(villager);
-		if (progress.pendingScrollRank() != 0) {
-			return false;
-		}
-
 		ProgressionStep step = next.get();
 		if (villager.getVillagerData().level() < step.toRank()) {
 			return false;
@@ -90,7 +90,9 @@ public final class ProgressionService {
 		player.sendSystemMessage(Component.literal(step.materialName() + " contribution: "
 				+ contribution + "/" + step.requiredAmount()));
 
-		generateScrollIfReady(player, villager, step);
+		if (contribution == step.requiredAmount()) {
+			completeProgression(player, villager, step);
+		}
 		return true;
 	}
 
@@ -100,42 +102,86 @@ public final class ProgressionService {
 			return false;
 		}
 		ProgressionStep step = next.get();
-		setVillagerProgress(villager, getVillagerProgress(villager).withResourceContribution(
-				Math.max(0, Math.min(step.requiredAmount(), amount))));
-		generateScrollIfReady(player, villager, step);
+		int contribution = Math.max(0, Math.min(step.requiredAmount(), amount));
+		setVillagerProgress(villager, getVillagerProgress(villager).withResourceContribution(contribution));
+		if (contribution == step.requiredAmount()) {
+			completeProgression(player, villager, step);
+		}
 		return true;
 	}
 
-	public static boolean completeScrollUnlock(ServerPlayer player, Villager villager) {
+	public static boolean completeScrollUnlock(ServerPlayer player, Villager villager, ItemStack translatedScroll) {
 		if (!BlacksmithEligibility.isBlacksmithingEligible(villager)) {
 			return false;
 		}
 
+		String technologyName = ModItems.scrollTechnology(translatedScroll);
+		Identifier technology = Identifier.tryParse(technologyName);
+		if (technology == null) {
+			return false;
+		}
+		String profession = ModItems.scrollProfession(translatedScroll);
 		VillagerProgress progress = getVillagerProgress(villager);
+		if (progress.hasTechnology(technology)) {
+			return false;
+		}
 		Optional<ProgressionStep> next = nextStep(villager);
-		if (next.isEmpty() || progress.pendingScrollRank() != next.get().toRank()
-				|| villager.getVillagerData().level() < next.get().toRank()) {
+		if (next.isEmpty() || !next.get().technologyId().equals(technology)
+				|| !next.get().profession().equals(profession)) {
 			return false;
 		}
 
 		ProgressionStep step = next.get();
+		return completeProgression(player, villager, step);
+	}
+
+	public static boolean completeProgression(ServerPlayer player, Villager villager) {
+		Optional<ProgressionStep> step = nextStep(villager);
+		return step.isPresent() && getVillagerProgress(villager).resourceContribution() >= step.get().requiredAmount()
+				&& completeProgression(player, villager, step.get());
+	}
+
+	private static boolean completeProgression(ServerPlayer player, Villager villager, ProgressionStep step) {
+		int previousRank = villager.getVillagerData().level();
+		if (previousRank < step.toRank()) {
+			villager.setVillagerData(villager.getVillagerData().withLevel(step.toRank()));
+		}
+		VillagerProgress progress = getVillagerProgress(villager);
 		setVillagerProgress(villager, progress.withTradeUnlock(step.toRank()).withKnowledge(step.knowledgeId())
 				.withTechnology(step.technologyId()));
-		refreshTrades(villager, (ServerLevel) villager.level());
+		refreshTrades(villager, (ServerLevel) villager.level(), previousRank);
 
-		PlayerProgress playerProgress = getPlayerProgress(player);
-		Identifier feature = RecipeProgression.featureFor(step);
-		if (feature != null && !playerProgress.hasFeature(feature)) {
-			setPlayerProgress(player, playerProgress.withFeature(feature));
-			RecipeProgression.refreshPlayerRecipes(player);
-			player.sendSystemMessage(Component.literal(displayName(step.technologyId()) + " recipes unlocked."));
-		}
-		awardAgeAdvancement(player, step);
+		learnFromRank(player, villager);
 
 		player.sendSystemMessage(Component.literal("The " + displayName(villager) + " advanced to "
 				+ VillagerRankRequirement.levelName(step.toRank()) + "."));
 		requestNextResource(player, villager);
 		return true;
+	}
+
+	private static void learnFromRank(ServerPlayer player, Villager villager) {
+		String profession = BlacksmithEligibility.professionName(villager);
+		PlayerProgress playerProgress = getPlayerProgress(player);
+		PlayerProgress updatedProgress = playerProgress;
+		boolean recipesChanged = false;
+		for (ProgressionStep step : ProgressionDefinitions.forProfession(profession)) {
+			if (step.toRank() > villager.getVillagerData().level()) {
+				continue;
+			}
+			Identifier feature = RecipeProgression.featureFor(step);
+			if (feature != null && !updatedProgress.hasFeature(feature)) {
+				updatedProgress = updatedProgress.withFeature(feature);
+				recipesChanged = true;
+				player.sendSystemMessage(Component.literal(displayName(step.technologyId()) + " recipes unlocked."));
+			}
+			awardAgeAdvancement(player, step);
+		}
+		if (updatedProgress != playerProgress) {
+			setPlayerProgress(player, updatedProgress);
+		}
+		if (recipesChanged) {
+			RecipeProgression.refreshPlayerRecipes(player);
+		}
 	}
 
 	private static void awardAgeAdvancement(ServerPlayer player, ProgressionStep step) {
@@ -164,21 +210,33 @@ public final class ProgressionService {
 				.get(Identifier.fromNamespaceAndPath("startermod", name));
 	}
 
-	public static void refreshTrades(Villager villager, ServerLevel level) {
-		var offers = villager.getOffers();
-		offers.clear();
-		VillagerProgress progress = getVillagerProgress(villager);
+	public static void refreshTrades(Villager villager, ServerLevel level, int previousRank) {
 		int rank = villager.getVillagerData().level();
-		int unlockedRank = BlacksmithEligibility.isBlacksmithingEligible(villager)
-				? Math.min(rank, progress.unlockedTradeLevel()) : rank;
-		for (int rankLevel = 1; rankLevel <= unlockedRank; rankLevel++) {
+		for (int rankLevel = previousRank + 1; rankLevel <= rank; rankLevel++) {
 			villager.setVillagerData(villager.getVillagerData().withLevel(rankLevel));
 			((VillagerTradesMixin) villager).startermod$updateTrades(level);
 		}
 		villager.setVillagerData(villager.getVillagerData().withLevel(rank));
+		addKnowledgeScrollTrades(villager);
 	}
 
-	public static boolean unlockTechnology(ServerPlayer player, Villager villager, Identifier technologyId) {
+	public static void debugSetRank(ServerPlayer player, Villager villager, int rank) {
+		int previousRank = villager.getVillagerData().level();
+		villager.setVillagerData(villager.getVillagerData().withLevel(rank));
+
+		VillagerProgress progress = getVillagerProgress(villager).withTradeUnlock(rank);
+		for (ProgressionStep step : ProgressionDefinitions.forProfession(
+				BlacksmithEligibility.professionName(villager))) {
+			if (step.toRank() <= rank) {
+				progress = progress.withKnowledge(step.knowledgeId()).withTechnology(step.technologyId());
+			}
+		}
+		setVillagerProgress(villager, progress);
+		refreshTrades(villager, (ServerLevel) villager.level(), previousRank);
+		learnFromRank(player, villager);
+	}
+
+	public static boolean unlockTechnology(Villager villager, Identifier technologyId) {
 		Optional<ProgressionStep> step = ProgressionDefinitions.forVillager(
 				BlacksmithEligibility.professionName(villager), getVillagerProgress(villager).unlockedTradeLevel());
 		if (step.isEmpty() || !step.get().technologyId().equals(technologyId)) {
@@ -187,8 +245,7 @@ public final class ProgressionService {
 
 		ProgressionStep definition = step.get();
 		VillagerProgress progress = getVillagerProgress(villager)
-				.withResourceContribution(definition.requiredAmount())
-				.withPendingScroll(definition.toRank());
+				.withResourceContribution(definition.requiredAmount());
 		setVillagerProgress(villager, progress);
 		return true;
 	}
@@ -205,19 +262,29 @@ public final class ProgressionService {
 		return true;
 	}
 
-	private static void generateScrollIfReady(ServerPlayer player, Villager villager, ProgressionStep step) {
-		VillagerProgress progress = getVillagerProgress(villager);
-		if (progress.resourceContribution() != step.requiredAmount() || progress.pendingScrollRank() != 0) {
+	private static void addKnowledgeScrollTrades(Villager villager) {
+		if (!BlacksmithEligibility.isBlacksmithingEligible(villager)) {
 			return;
 		}
-		if (ModItems.giveKnowledgeScroll(player, displayName(step.technologyId()), displayName(villager),
-				VillagerRankRequirement.levelName(step.toRank()))) {
-			setVillagerProgress(villager, progress.withPendingScroll(step.toRank()));
-			player.sendSystemMessage(Component.literal(displayName(step.technologyId()) + " Scroll generated. Take it to a Librarian."));
+		String profession = BlacksmithEligibility.professionName(villager);
+		VillagerProgress progress = getVillagerProgress(villager);
+		for (ProgressionStep step : ProgressionDefinitions.forProfession(profession)) {
+			if (!progress.hasTechnology(step.technologyId())) {
+				continue;
+			}
+			ItemStack scroll = ModItems.knowledgeScroll(step.technologyId(), profession,
+					VillagerRankRequirement.levelName(step.toRank()));
+			if (villager.getOffers().stream().anyMatch(offer -> offer.getResult().is(scroll.getItem())
+					&& ModItems.scrollTechnology(offer.getResult()).equals(ModItems.scrollTechnology(scroll)))) {
+				continue;
+			}
+			villager.getOffers().add(new MerchantOffer(
+					new ItemCost(Items.EMERALD, ProgressionConstants.KNOWLEDGE_SCROLL_EMERALD_COST), scroll,
+					12, 1, 0.05F));
 		}
 	}
 
-	public static void syncRankMilestones(Villager villager) {
+	private static void syncTradeUnlockWithRank(Villager villager) {
 		if (!BlacksmithEligibility.isBlacksmithingEligible(villager)) {
 			return;
 		}

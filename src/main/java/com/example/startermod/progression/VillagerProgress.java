@@ -9,6 +9,7 @@ import net.minecraft.resources.Identifier;
 
 public record VillagerProgress(int resourceContribution, List<Identifier> knowledge, List<Identifier> unlockedTechnologies,
 		int unlockedTradeLevel, int pendingScrollRank) {
+	// pendingScrollRank is retained so existing worlds can still deserialize their saved data.
 	public static final Codec<VillagerProgress> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.INT.optionalFieldOf("resource_contribution", 0).forGetter(VillagerProgress::resourceContribution),
 			Identifier.CODEC.listOf().optionalFieldOf("knowledge", List.of()).forGetter(VillagerProgress::knowledge),
@@ -51,10 +52,6 @@ public record VillagerProgress(int resourceContribution, List<Identifier> knowle
 
 	public VillagerProgress withTradeUnlock(int level) {
 		return copy(0, this.knowledge, this.unlockedTechnologies, level, 0);
-	}
-
-	public VillagerProgress withPendingScroll(int rank) {
-		return copy(this.resourceContribution, this.knowledge, this.unlockedTechnologies, this.unlockedTradeLevel, rank);
 	}
 
 	public boolean knows(Identifier id) {

@@ -5,7 +5,7 @@ This is the practical map for the current gameplay loop. Follow the arrows when 
 ## The Loop
 
 ```text
-Player reaches the next blacksmith rank
+Player trades with a villager who reaches a new blacksmith rank
         |
         v
 Player interacts with Toolsmith, Weaponsmith, or Armorer
@@ -15,8 +15,11 @@ VillagerMilestoneHandler
         |
         v
 ProgressionService.requestNextResource()
-        |
-        v
+         |
+         v
+Player learns the recipes and advancement for that rank
+         |
+         v
 Player supplies Stone
         |
         v
@@ -26,7 +29,7 @@ BlacksmithContributionHandler
 ProgressionService.contributeResource()
         |
         v
-ModItems.giveKnowledgeScroll()
+Villager offers a knowledge scroll trade
         |
         v
 LibrarianTranslationHandler
@@ -62,7 +65,7 @@ Player recipe features
     STONEWORKING_RECIPES, IRONWORKING_RECIPES, DIAMONDWORKING_RECIPES
 ```
 
-The translated scroll is the bridge. A villager can reach a vanilla rank without being allowed to use that rank's trades until the progression step is complete. The player receives recipes and the matching age advancement only when the translated knowledge is transferred.
+The player learns the recipes and matching age advancement when a villager reaches the relevant rank through normal trading or a debug rank change. The source villager completes its local progression when the resource requirement is met. That completion unlocks fixed emerald scroll trades. The Librarian translates a scroll, and a different eligible villager can then learn it.
 
 ## Where Definitions Live
 
@@ -114,8 +117,8 @@ Persistent state attached to each villager:
 - `resourceContribution`: current request progress, such as `12/32`.
 - `knowledge`: knowledge already learned by this villager.
 - `unlockedTechnologies`: completed technology steps.
-- `unlockedTradeLevel`: highest trade tier made available by this system.
-- `pendingScrollRank`: rank whose scroll was generated and is waiting for Librarian translation/return.
+- `unlockedTradeLevel`: highest progression tier completed by this villager.
+- `pendingScrollRank`: legacy persisted field retained for old saves; scrolls are now fixed villager trades.
 
 Change the `CODEC` and `empty()` if you add or rename persistent fields.
 
@@ -136,9 +139,9 @@ The only file that should make progression decisions. It:
 - Finds the next `ProgressionStep`.
 - Announces the current material request.
 - Accepts material contributions.
-- Generates the generic knowledge scroll.
-- Completes the translated scroll.
-- Advances the villager's gated trade level.
+- Adds progression-gated emerald scroll trades.
+- Completes local progression or a matching translated scroll.
+- Upgrades the destination villager's vanilla rank when knowledge is transferred.
 - Adds villager knowledge and technology.
 - Grants the player's recipe feature.
 - Refreshes villager trades and player recipes.
@@ -151,28 +154,24 @@ Identifies Toolsmith, Weaponsmith, and Armorer as eligible blacksmithing profess
 
 The first definitions use Toolsmith. Later definitions can use other professions without changing the resource/scroll/knowledge mechanism.
 
-### `interaction/VillagerLocator.java`
-
-Finds the nearest eligible blacksmith for a Librarian. This supports carrying scrolls between villages.
-
 ## Player Interactions
 
 ### `interaction/VillagerMilestoneHandler.java`
 
-On villager interaction, asks the service to announce the current request. It does not change state itself.
+On villager interaction, asks the service to synchronize player unlocks and announce the current request. It does not change villager state itself.
 
 ### `interaction/BlacksmithContributionHandler.java`
 
 Handles two items used on villagers:
 
-- Generic translated knowledge scroll: completes the current step.
+- Generic translated knowledge scroll: completes the matching step and upgrades the villager if needed.
 - The material required by the current step: increments the request.
 
 The required item comes from `ProgressionStep`; this handler does not contain a Stone-only or Iron-only branch.
 
 ### `interaction/LibrarianTranslationHandler.java`
 
-Consumes an untranslated generic scroll when used on a Librarian and gives a translated generic scroll for the nearest blacksmith's pending step.
+Consumes an untranslated scroll when used on a Librarian and gives a translated scroll carrying the same technology and profession. It does not locate or require a target villager.
 
 ### `interaction/IronworkingWorkstationHandler.java`
 
@@ -198,13 +197,9 @@ Final server-side safety gate. Even if a client has stale recipe data, the locke
 
 ## Villager Trade Mixins
 
-### `mixin/VillagerTradeGateMixin.java`
-
-Stops vanilla `Villager.updateTrades()` from generating a higher tier for an eligible villager until `unlockedTradeLevel` permits it.
-
 ### `mixin/VillagerProgressionMixin.java`
 
-Hooks successful vanilla villager trades and asks `ProgressionService` to announce the current request. It does not issue scrolls directly.
+Hooks successful vanilla villager trades and asks `ProgressionService` to synchronize player unlocks and announce the current request. It does not issue scrolls directly.
 
 ### `mixin/VillagerTradesMixin.java`
 
@@ -239,19 +234,15 @@ Root of the Villager Progression advancement tree. It is completed by the first 
 
 ### `data/startermod/advancement/{profession}_{age}.json`
 
-The nine profession-specific nodes awarded when a translated Stoneworking, Ironworking, or Diamondworking scroll is handed back to the matching Toolsmith, Weaponsmith, or Armorer. These nodes have no recipe rewards; recipes remain controlled by the villager progression system.
+The nine profession-specific nodes awarded when the player learns Stoneworking, Ironworking, or Diamondworking from the matching Toolsmith, Weaponsmith, or Armorer. These nodes have no recipe rewards; recipes remain controlled by the villager progression system.
 
 ### `fabric.mod.json`
 
-Declares the main/client entrypoints and the common/client mixin configurations.
+Declares the main entrypoint and common mixin configuration.
 
 ### `startermod.mixins.json`
 
 Lists common mixins, including the recipe-book gate.
-
-### `src/client/resources/startermod.client.mixins.json`
-
-Lists client-only template mixins.
 
 ## Commands
 
@@ -269,15 +260,15 @@ Operator testing entrypoint. The useful commands are:
 /villagerprogress unlock stoneworking
 ```
 
-The real loop is still resource -> scroll -> Librarian -> translated scroll -> Toolsmith. `unlock` is only a test shortcut.
+The real loop is resource -> local progression -> emerald scroll trade -> Librarian -> translated scroll -> destination blacksmith. `unlock` is only a test shortcut.
 
 ## Adding a New Progression
 
 1. Add IDs in `TechnologyId`, `KnowledgeId`, and `PlayerFeatureId`.
-2. Add a `ProgressionStep` in `ProgressionDefinitions`.
-3. Add its recipe IDs to `RecipeProgression` and its output items to `CraftingMenuMixin`.
+2. Add a `ProgressionStep` and its recipe IDs in `ProgressionDefinitions`.
+3. Add its output items to `CraftingMenuMixin`.
 4. Confirm the profession is accepted by `BlacksmithEligibility`.
-5. Test resource contribution, scroll generation, Librarian translation, translated-scroll acceptance, recipes, and trade gating.
+5. Test resource contribution, scroll trade availability, Librarian translation, translated-scroll acceptance, recipes, and vanilla trade unlocking.
 
 Do not add a new interaction handler for Stoneworking, Ironworking, or Diamondworking. The point of `ProgressionStep` is that those use the same engine.
 

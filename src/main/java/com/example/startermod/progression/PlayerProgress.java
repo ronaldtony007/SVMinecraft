@@ -8,6 +8,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.resources.Identifier;
 
 public record PlayerProgress(boolean firstScrollGranted, List<Identifier> unlockedPlayerFeatures) {
+	// firstScrollGranted is retained so existing worlds can still deserialize their saved data.
 	public static final Codec<PlayerProgress> CODEC = RecordCodecBuilder.create(instance -> instance.group(
 			Codec.BOOL.optionalFieldOf("first_scroll_granted", false).forGetter(PlayerProgress::firstScrollGranted),
 			Identifier.CODEC.listOf().optionalFieldOf("unlocked_player_features", List.of()).forGetter(PlayerProgress::unlockedPlayerFeatures)
@@ -19,10 +20,6 @@ public record PlayerProgress(boolean firstScrollGranted, List<Identifier> unlock
 
 	public static PlayerProgress empty() {
 		return new PlayerProgress(false, List.of());
-	}
-
-	public PlayerProgress withFirstScrollGranted() {
-		return new PlayerProgress(true, this.unlockedPlayerFeatures);
 	}
 
 	public PlayerProgress withFeature(Identifier id) {

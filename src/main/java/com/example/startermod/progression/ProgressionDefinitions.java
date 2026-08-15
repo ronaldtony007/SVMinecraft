@@ -35,6 +35,14 @@ public final class ProgressionDefinitions {
 		return STEPS.stream().filter(step -> step.matches(profession, unlockedRank)).findFirst();
 	}
 
+	public static List<ProgressionStep> forProfession(String profession) {
+		return STEPS.stream().filter(step -> step.profession().equals(profession)).toList();
+	}
+
+	public static List<ProgressionStep> allSteps() {
+		return STEPS;
+	}
+
 	private static Set<Identifier> recipes(String... names) {
 		return java.util.Arrays.stream(names).map(Identifier::withDefaultNamespace).collect(java.util.stream.Collectors.toUnmodifiableSet());
 	}

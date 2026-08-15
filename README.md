@@ -4,18 +4,21 @@ This Fabric mod changes Minecraft technology progression so villagers teach the 
 
 ## First Working Loop: Stoneworking
 
-Wood tools remain available normally. Completing the Stoneworking step grants the custom `Stone Age` advancement, but stone-tool recipes remain locked until the translated scroll is handed back.
+Wood tools remain available normally. Completing the Stoneworking step grants the custom `Stone Age` advancement and unlocks a fixed emerald trade for a portable Stoneworking Scroll.
 
 The first progression is:
 
 ```text
 Blacksmith Apprentice
-    -> request 32 Stone to upgrade to the next level
-    -> generate Stoneworking Scroll
+    -> normal villager trading teaches the player Stoneworking
+    -> request 32 Stone to upgrade the source villager
+    -> Stoneworking Scroll trade becomes available
+    -> buy the scroll for emeralds
+    -> travel to another village
     -> Librarian translates scroll
-    -> translated scroll is handed back to the blacksmith
-    -> blacksmith progression advances
-    -> player receives stone-tool recipes
+    -> translated scroll is given to that village's blacksmith
+    -> destination blacksmith progression advances
+    -> player receives the matching recipes and advancement at each new rank
     -> Apprentice trades become available
 ```
 
@@ -44,31 +47,31 @@ Stand within 8 blocks of a Toolsmith and use operator commands:
 
 ```text
 /villagerprogress reset
-/villagerprogress setrank novice
+/villagerprogress setrank apprentice
 /villagerprogress info
 /villagerprogress setresource stone 32
 /villagerprogress giveknowledge stoneworking
 /villagerprogress unlock stoneworking
 ```
 
-`setresource stone 32` simulates supplying the resource and creates the pending Stoneworking Scroll. `unlock stoneworking` is a test shortcut that simulates the translated scroll, advances the villager to Apprentice, and unlocks the player's stone-tool recipes.
+`setresource stone 32` simulates supplying the resource, completes the source progression, and unlocks its scroll trade. `unlock stoneworking` is a test shortcut that completes the same progression without resource handoff.
 
 To test the real loop:
 
 1. Get a Toolsmith, Weaponsmith, or Armorer and keep the player near it.
 2. Trade until the blacksmith reaches Apprentice, then interact to see the `Provide 32 Stone to upgrade to the next level` request.
 3. Use Stone on the blacksmith until the contribution reaches `32/32`.
-4. Take the generated Knowledge Scroll to a nearby Librarian.
-5. Take the translated scroll back to the Toolsmith.
-6. Hand the translated scroll back to the blacksmith.
+4. Buy the Stoneworking Scroll from the source blacksmith for emeralds.
+5. Travel to another village and give the scroll to a Librarian.
+6. Give the translated scroll to the destination blacksmith.
 7. Open the recipe book and confirm the stone sword, pickaxe, axe, shovel, and hoe are unlocked.
 
 ## Architecture
 
 - `progression/ProgressionStep.java` describes one rank-to-rank technology step.
 - `progression/ProgressionDefinitions.java` contains the current Toolsmith steps.
-- `progression/ProgressionService.java` runs the resource -> scroll -> Librarian -> knowledge -> advancement loop.
-- `VillagerProgress` stores villager resource, knowledge, technology, rank, and pending-scroll state.
+- `progression/ProgressionService.java` runs local progression, scroll trades, Librarian translation, knowledge transfer, and advancement awarding.
+- `VillagerProgress` stores villager resource, knowledge, technology, rank, and compatible legacy scroll state.
 - `PlayerProgress` stores player recipe features.
 - `RecipeProgression` awards recipes only after the matching feature is granted.
 - `RecipeBookGateMixin` blocks vanilla advancement recipe awards for gated tools.

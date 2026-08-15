@@ -3,9 +3,9 @@
 	"id": "startermod",
 	"version": "${version}",
 	"name": "Starter Mod",
-	"description": "A beginner Fabric mod for Minecraft 26.2.",
+	"description": "Villagers teach the player technology through progression.",
 	"authors": [
-		"Your Name"
+		"Starter Mod Team"
 	],
 	"contact": {
 		"sources": "https://github.com/"
@@ -16,17 +16,10 @@
 	"entrypoints": {
 		"main": [
 			"com.example.startermod.StarterMod"
-		],
-		"client": [
-			"com.example.startermod.client.StarterModClient"
 		]
 	},
 	"mixins": [
-		"startermod.mixins.json",
-		{
-			"config": "startermod.client.mixins.json",
-			"environment": "client"
-		}
+		"startermod.mixins.json"
 	],
 	"depends": {
 		"fabricloader": ">=0.19.3",

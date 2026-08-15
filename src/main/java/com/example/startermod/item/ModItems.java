@@ -14,6 +14,8 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.component.CustomData;
 
 import com.example.startermod.StarterMod;
 
@@ -35,17 +37,50 @@ public final class ModItems {
 		return Registry.register(BuiltInRegistries.ITEM, key, item);
 	}
 
-	public static boolean giveKnowledgeScroll(ServerPlayer player, String technology, String profession, String rank) {
-		return give(player, KNOWLEDGE_SCROLL, technology + " " + profession + " " + rank + " Scroll");
-	}
-
 	public static boolean giveTranslatedKnowledgeScroll(ServerPlayer player, String technology, String profession, String rank) {
-		return give(player, TRANSLATED_KNOWLEDGE_SCROLL, "Translated " + technology + " " + profession + " " + rank + " Scroll");
+		return give(player, translatedKnowledgeScroll(technology, profession, rank));
 	}
 
-	private static boolean give(ServerPlayer player, Item item, String name) {
+	public static ItemStack knowledgeScroll(Identifier technology, String profession, String rank) {
+		return scroll(KNOWLEDGE_SCROLL, technology.toString(), displayName(technology.toString()), profession, rank, false);
+	}
+
+	public static ItemStack translatedKnowledgeScroll(String technology, String profession, String rank) {
+		return scroll(TRANSLATED_KNOWLEDGE_SCROLL, technology, displayName(technology), profession, rank, true);
+	}
+
+	public static String scrollTechnology(ItemStack stack) {
+		return stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY)
+				.copyTag().getStringOr("technology", "");
+	}
+
+	public static String scrollProfession(ItemStack stack) {
+		return stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY)
+				.copyTag().getStringOr("profession", "");
+	}
+
+	private static ItemStack scroll(Item item, String technology, String technologyLabel, String profession, String rank,
+			boolean translated) {
 		ItemStack stack = new ItemStack(item);
-		stack.set(DataComponents.CUSTOM_NAME, Component.literal(name));
+		String prefix = translated ? "Translated " : "";
+		stack.set(DataComponents.CUSTOM_NAME, Component.literal(prefix + technologyLabel + " " + displayName(profession) + " " + rank + " Scroll"));
+		CompoundTag data = new CompoundTag();
+		data.putString("technology", technology);
+		data.putString("profession", profession);
+		data.putString("rank", rank);
+		data.putBoolean("translated", translated);
+		stack.set(DataComponents.CUSTOM_DATA, CustomData.of(data));
+		return stack;
+	}
+
+	private static String displayName(String value) {
+		String path = value.contains(":") ? value.substring(value.indexOf(':') + 1) : value;
+		return java.util.Arrays.stream(path.split("_"))
+				.map(part -> Character.toUpperCase(part.charAt(0)) + part.substring(1))
+				.collect(java.util.stream.Collectors.joining(" "));
+	}
+
+	private static boolean give(ServerPlayer player, ItemStack stack) {
 		if (player.getInventory().add(stack)) {
 			return true;
 		}

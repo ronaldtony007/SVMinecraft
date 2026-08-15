@@ -19,7 +19,6 @@ import net.minecraft.world.entity.npc.villager.Villager;
 
 import com.example.startermod.interaction.VillagerLocator;
 import com.example.startermod.profession.BlacksmithEligibility;
-import com.example.startermod.progression.KnowledgeId;
 import com.example.startermod.progression.ProgressionService;
 import com.example.startermod.progression.ProgressionStep;
 import com.example.startermod.progression.VillagerProgress;
@@ -61,7 +60,6 @@ public final class VillagerProgressCommand {
 	}
 
 	private static int info(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-		ServerPlayer player = context.getSource().getPlayerOrException();
 		Villager villager = requireVillager(context);
 		if (villager == null) return 0;
 
@@ -76,10 +74,6 @@ public final class VillagerProgressCommand {
 			context.getSource().sendSuccess(() -> Component.literal(step.materialName() + ": "
 					+ progress.resourceContribution() + "/" + step.requiredAmount()), false);
 		});
-		if (progress.pendingScrollRank() > 0) {
-			context.getSource().sendSuccess(() -> Component.literal("Pending translated scroll: "
-					+ VillagerRankRequirement.levelName(progress.pendingScrollRank())), false);
-		}
 		return 1;
 	}
 
@@ -97,8 +91,7 @@ public final class VillagerProgressCommand {
 			default -> -1;
 		};
 		if (level < 0) return fail(context, "Unknown rank: " + rank);
-		villager.setVillagerData(villager.getVillagerData().withLevel(level));
-		ProgressionService.refreshTrades(villager, (net.minecraft.server.level.ServerLevel) villager.level());
+		ProgressionService.debugSetRank(player, villager, level);
 		ProgressionService.requestNextResource(player, villager);
 		return success(context, "Set villager rank to " + VillagerRankRequirement.levelName(level) + ".");
 	}
@@ -118,7 +111,6 @@ public final class VillagerProgressCommand {
 	}
 
 	private static int giveKnowledge(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-		ServerPlayer player = context.getSource().getPlayerOrException();
 		Villager villager = requireVillager(context);
 		if (villager == null) return 0;
 		Identifier knowledge = Identifier.fromNamespaceAndPath("startermod", StringArgumentType.getString(context, "technology"));
@@ -133,11 +125,10 @@ public final class VillagerProgressCommand {
 		if (villager == null) return 0;
 		Identifier technology = Identifier.fromNamespaceAndPath("startermod", StringArgumentType.getString(context, "technology"));
 		var step = ProgressionService.nextStep(villager);
-		if (!ProgressionService.unlockTechnology(player, villager, technology) || step.isEmpty()) {
+		if (!ProgressionService.unlockTechnology(villager, technology) || step.isEmpty()) {
 			return fail(context, "That technology is not the current progression step.");
 		}
-		villager.setVillagerData(villager.getVillagerData().withLevel(step.get().toRank()));
-		ProgressionService.completeScrollUnlock(player, villager);
+		ProgressionService.completeProgression(player, villager);
 		return success(context, "Unlocked " + ProgressionService.displayName(technology) + ".");
 	}
 
