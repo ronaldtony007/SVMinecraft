@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 import com.example.startermod.command.VillagerProgressCommand;
 import com.example.startermod.interaction.BlacksmithContributionHandler;
 import com.example.startermod.interaction.LibrarianTranslationHandler;
-import com.example.startermod.interaction.IronworkingWorkstationHandler;
 import com.example.startermod.interaction.VillagerMilestoneHandler;
 import com.example.startermod.item.ModItems;
 import com.example.startermod.recipe.RecipeProgression;
@@ -27,7 +26,6 @@ public final class StarterMod implements ModInitializer {
 		BlacksmithContributionHandler.initialize();
 		VillagerMilestoneHandler.initialize();
 		LibrarianTranslationHandler.initialize();
-		IronworkingWorkstationHandler.initialize();
 		VillagerProgressCommand.initialize();
 		ServerPlayConnectionEvents.JOIN.register((handler, sender, server) -> RecipeProgression.refreshPlayerRecipes(handler.player));
 		LOGGER.info("Starter Mod progression initialized.");

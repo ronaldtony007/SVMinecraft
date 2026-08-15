@@ -6,6 +6,7 @@
 		"CraftingMenuMixin",
 		"VillagerTradesMixin",
 		"VillagerProgressionMixin",
+		"VillagerTradeGateMixin",
 		"RecipeBookGateMixin"
 	],
 	"injectors": {

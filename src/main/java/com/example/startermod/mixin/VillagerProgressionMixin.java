@@ -14,13 +14,13 @@ import com.example.startermod.progression.ProgressionService;
 
 @Mixin(AbstractVillager.class)
 public abstract class VillagerProgressionMixin {
-	@Inject(method = "notifyTrade", at = @At("TAIL"))
+	@Inject(method = "notifyTrade", at = @At("HEAD"))
 	private void startermod$progressAfterTrade(MerchantOffer offer, CallbackInfo info) {
 		if (!((Object) this instanceof Villager villager)) {
 			return;
 		}
 		if (villager.getTradingPlayer() instanceof ServerPlayer player) {
-			ProgressionService.requestNextResource(player, villager);
+			ProgressionService.recordTrade(player, villager);
 		}
 	}
 }

@@ -5,7 +5,7 @@ This is the practical map for the current gameplay loop. Follow the arrows when 
 ## The Loop
 
 ```text
-Player trades with a villager who reaches a new blacksmith rank
+Player makes a successful blacksmith trade
         |
         v
 Player interacts with Toolsmith, Weaponsmith, or Armorer
@@ -17,12 +17,18 @@ VillagerMilestoneHandler
 ProgressionService.requestNextResource()
          |
          v
-Player learns the recipes and advancement for that rank
+Player receives the first-trade advancement and current resource request
          |
          v
-Player supplies Stone
+Player supplies the required resource
         |
-        v
+         v
+Resource criterion is complete
+         |
+         v
+Villager's vanilla rank and offers advance
+         |
+         v
 BlacksmithContributionHandler
         |
         v
@@ -144,7 +150,7 @@ The only file that should make progression decisions. It:
 - Upgrades the destination villager's vanilla rank when knowledge is transferred.
 - Adds villager knowledge and technology.
 - Grants the player's recipe feature.
-- Refreshes villager trades and player recipes.
+- Tracks resource-cleared progression separately from vanilla rank, keeps scroll offers at the end of the offer list, and refreshes player recipes.
 
 If a rule must work from a command, interaction, or mixin, put the rule here and let those entry points call it.
 
@@ -173,10 +179,6 @@ The required item comes from `ProgressionStep`; this handler does not contain a 
 
 Consumes an untranslated scroll when used on a Librarian and gives a translated scroll carrying the same technology and profession. It does not locate or require a target villager.
 
-### `interaction/IronworkingWorkstationHandler.java`
-
-The older Smithing Table restriction remains as a separate workstation rule. It checks the nearby villager's Ironworking technology.
-
 ## Recipes and Recipe Locking
 
 ### `recipe/RecipeProgression.java`
@@ -201,9 +203,13 @@ Final server-side safety gate. Even if a client has stale recipe data, the locke
 
 Hooks successful vanilla villager trades and asks `ProgressionService` to synchronize player unlocks and announce the current request. It does not issue scrolls directly.
 
+### `mixin/VillagerTradeGateMixin.java`
+
+Keeps custom scroll offers at the end of the offer list by removing and re-adding them around vanilla trade generation. Vanilla rank advancement remains independent; each reached rank is then checked against its resource criterion.
+
 ### `mixin/VillagerTradesMixin.java`
 
-Invoker interface exposing vanilla `updateTrades()`. `ProgressionService.refreshTrades()` uses it after a successful progression step.
+Invoker interface exposing vanilla `updateTrades()`. The progression service uses it for debug rank changes and scroll-offer ordering.
 
 ## Items and Resources
 

@@ -10,8 +10,9 @@ The first progression is:
 
 ```text
 Blacksmith Apprentice
-    -> normal villager trading teaches the player Stoneworking
+    -> first trade starts the Stoneworking request
     -> request 32 Stone to upgrade the source villager
+    -> Apprentice checks the Stone requirement
     -> Stoneworking Scroll trade becomes available
     -> buy the scroll for emeralds
     -> travel to another village
@@ -19,7 +20,7 @@ Blacksmith Apprentice
     -> translated scroll is given to that village's blacksmith
     -> destination blacksmith progression advances
     -> player receives the matching recipes and advancement at each new rank
-    -> Apprentice trades become available
+    -> later vanilla trades remain gated by each resource requirement
 ```
 
 The same engine applies to Toolsmiths, Weaponsmiths, and Armorers. It defines Apprentice -> Journeyman with Iron and Expert -> Master with Diamond. The material, quantity, knowledge, and recipes are defined in `ProgressionDefinitions`, not in the interaction handlers.
