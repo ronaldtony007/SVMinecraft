@@ -16,6 +16,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.npc.villager.Villager;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import com.example.startermod.interaction.VillagerLocator;
 import com.example.startermod.profession.BlacksmithEligibility;
@@ -71,8 +72,14 @@ public final class VillagerProgressCommand {
 		ProgressionService.nextStep(villager).ifPresent(step -> {
 			context.getSource().sendSuccess(() -> Component.literal("Next technology: "
 					+ ProgressionService.displayName(step.technologyId())), false);
-			context.getSource().sendSuccess(() -> Component.literal(step.materialName() + ": "
-					+ progress.resourceContribution() + "/" + step.requiredAmount()), false);
+			step.requirements().forEach((item, required) -> {
+				Identifier itemId = BuiltInRegistries.ITEM.getKey(item);
+				int contribution = progress.resourceContributions().containsKey(itemId)
+						? progress.contribution(itemId)
+						: item == step.requiredMaterial() ? progress.resourceContribution() : 0;
+				context.getSource().sendSuccess(() -> Component.literal(itemId.getPath() + ": "
+						+ contribution + "/" + required), false);
+			});
 		});
 		return 1;
 	}
@@ -102,12 +109,15 @@ public final class VillagerProgressCommand {
 		if (villager == null) return 0;
 		var step = ProgressionService.nextStep(villager);
 		String resource = StringArgumentType.getString(context, "resource").toLowerCase(java.util.Locale.ROOT);
-		if (step.isEmpty() || !step.get().materialName().equalsIgnoreCase(resource)) {
+		var requiredMaterial = step.flatMap(value -> value.requirements().keySet().stream()
+				.filter(item -> BuiltInRegistries.ITEM.getKey(item).getPath().equals(resource)).findFirst());
+		if (requiredMaterial.isEmpty()) {
 			return fail(context, "The current request is " + step.map(ProgressionStep::materialName).orElse("none") + ".");
 		}
 		int amount = IntegerArgumentType.getInteger(context, "amount");
-		ProgressionService.setResourceContribution(player, villager, amount);
-		return success(context, "Set " + step.get().materialName() + " contribution to " + amount + "/" + step.get().requiredAmount() + ".");
+		ProgressionService.setResourceContribution(player, villager, requiredMaterial.get(), amount);
+		return success(context, "Set " + resource + " contribution to " + amount + "/"
+				+ step.get().requirements().get(requiredMaterial.get()) + ".");
 	}
 
 	private static int giveKnowledge(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {

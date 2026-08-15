@@ -6,6 +6,9 @@ import java.util.List;
 import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.SingleRecipeInput;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 
 import com.example.startermod.progression.PlayerFeatureId;
 import com.example.startermod.progression.ProgressionDefinitions;
@@ -31,14 +34,20 @@ public final class RecipeProgression {
 			case "armorer" -> stone ? PlayerFeatureId.ARMORER_STONE_RECIPES
 					: copper ? PlayerFeatureId.ARMORER_COPPER_RECIPES
 							: iron ? PlayerFeatureId.ARMORER_IRON_RECIPES : PlayerFeatureId.ARMORER_DIAMOND_RECIPES;
+			case "farmer" -> step.technologyId().equals(TechnologyId.FARMER_APPRENTICE)
+					? PlayerFeatureId.FARMER_APPRENTICE_FOOD
+					: step.technologyId().equals(TechnologyId.FARMER_JOURNEYMAN)
+							? PlayerFeatureId.FARMER_JOURNEYMAN_FOOD : PlayerFeatureId.FARMER_MASTER_FOOD;
+			case "butcher" -> step.technologyId().equals(TechnologyId.BUTCHER_APPRENTICE)
+					? PlayerFeatureId.BUTCHER_APPRENTICE_FOOD : PlayerFeatureId.BUTCHER_JOURNEYMAN_FOOD;
+			case "fisherman" -> PlayerFeatureId.FISHERMAN_APPRENTICE_FOOD;
 			default -> null;
 		};
 	}
 
 	public static void refreshPlayerRecipes(ServerPlayer player) {
-		List<net.minecraft.world.item.crafting.RecipeHolder<?>> allRecipes = new ArrayList<>();
-		((net.minecraft.server.level.ServerLevel) player.level()).recipeAccess().getAllOfType(RecipeType.CRAFTING)
-				.forEach(recipe -> allRecipes.add((net.minecraft.world.item.crafting.RecipeHolder<?>) recipe));
+		List<net.minecraft.world.item.crafting.RecipeHolder<?>> allRecipes = new ArrayList<>(
+				((net.minecraft.server.level.ServerLevel) player.level()).recipeAccess().getRecipes());
 		List<net.minecraft.world.item.crafting.RecipeHolder<?>> toUnlock = allRecipes.stream()
 				.filter(recipe -> isUnlocked(player, recipe.id().identifier()))
 				.toList();
@@ -61,4 +70,23 @@ public final class RecipeProgression {
 			return feature != null && step.playerRecipes().contains(recipeId) && progress.hasFeature(feature);
 		});
 	}
+
+	public static boolean isCampfireInputUnlocked(ServerPlayer player, ItemStack input) {
+		return isCookingInputUnlocked(player, input, RecipeType.CAMPFIRE_COOKING);
+	}
+
+	public static boolean isCookingInputUnlocked(ServerPlayer player, ItemStack input) {
+		return isCookingInputUnlocked(player, input, RecipeType.SMELTING)
+				&& isCookingInputUnlocked(player, input, RecipeType.SMOKING)
+				&& isCookingInputUnlocked(player, input, RecipeType.CAMPFIRE_COOKING);
+	}
+
+	private static <T extends AbstractCookingRecipe> boolean isCookingInputUnlocked(ServerPlayer player, ItemStack input,
+			RecipeType<T> recipeType) {
+		var recipes = ((net.minecraft.server.level.ServerLevel) player.level()).recipeAccess().getAllOfType(recipeType);
+		return recipes.stream()
+				.filter(recipe -> recipe.value().matches(new SingleRecipeInput(input), player.level()))
+				.allMatch(recipe -> !isGated(recipe.id().identifier()) || isUnlocked(player, recipe.id().identifier()));
+	}
+
 }

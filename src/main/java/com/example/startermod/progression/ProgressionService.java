@@ -13,6 +13,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.trading.ItemCost;
 import net.minecraft.world.item.trading.MerchantOffer;
+import net.minecraft.core.registries.BuiltInRegistries;
 
 import com.example.startermod.item.ModItems;
 import com.example.startermod.mixin.VillagerTradesMixin;
@@ -50,7 +51,7 @@ public final class ProgressionService {
 
 	public static boolean requestNextResource(ServerPlayer player, Villager villager) {
 		learnFromRank(player, villager);
-		if (!BlacksmithEligibility.isBlacksmithingEligible(villager)) {
+		if (!BlacksmithEligibility.isProgressionEligible(villager)) {
 			return false;
 		}
 
@@ -64,11 +65,11 @@ public final class ProgressionService {
 		if (villager.getVillagerData().level() < step.toRank()) {
 			return false;
 		}
-		if (step.requiredAmount() == 0) {
+		if (step.requirements().values().stream().allMatch(amount -> amount == 0)) {
 			completeProgression(player, villager, step);
 			return true;
 		}
-		if (progress.resourceContribution() == 0) {
+		if (!hasAnyContribution(progress, step)) {
 			player.sendSystemMessage(Component.literal(
 					"Provide " + step.requiredAmount() + " " + step.materialName()
 							+ " to upgrade to the next level (0/" + step.requiredAmount() + ")."));
@@ -78,7 +79,7 @@ public final class ProgressionService {
 
 	public static boolean contributeResource(ServerPlayer player, Villager villager, Item material, int amount) {
 		Optional<ProgressionStep> next = nextStep(villager);
-		if (next.isEmpty() || next.get().requiredMaterial() != material) {
+		if (next.isEmpty() || !next.get().requirements().containsKey(material)) {
 			return false;
 		}
 
@@ -87,16 +88,18 @@ public final class ProgressionService {
 		if (villager.getVillagerData().level() < step.toRank()) {
 			return false;
 		}
-		int contribution = Math.min(step.requiredAmount(), progress.resourceContribution() + amount);
-		if (contribution == progress.resourceContribution()) {
+		Identifier itemId = BuiltInRegistries.ITEM.getKey(material);
+		int previous = contribution(progress, step, material);
+		int contribution = Math.min(step.requirements().get(material), previous + amount);
+		if (contribution == previous) {
 			return false;
 		}
 
-		setVillagerProgress(villager, progress.withResourceContribution(contribution));
-		player.sendSystemMessage(Component.literal(step.materialName() + " contribution: "
-				+ contribution + "/" + step.requiredAmount()));
+		setVillagerProgress(villager, progress.withContribution(itemId, contribution));
+		player.sendSystemMessage(Component.literal(BuiltInRegistries.ITEM.getKey(material).getPath()
+				+ " contribution: " + contribution + "/" + step.requirements().get(material)));
 
-		if (contribution == step.requiredAmount()) {
+		if (hasAllRequirements(getVillagerProgress(villager), step)) {
 			completeProgression(player, villager, step);
 		}
 		return true;
@@ -107,17 +110,26 @@ public final class ProgressionService {
 		if (next.isEmpty()) {
 			return false;
 		}
+		return setResourceContribution(player, villager, next.get().requiredMaterial(), amount);
+	}
+
+	public static boolean setResourceContribution(ServerPlayer player, Villager villager, Item material, int amount) {
+		Optional<ProgressionStep> next = nextStep(villager);
+		if (next.isEmpty() || !next.get().requirements().containsKey(material)) {
+			return false;
+		}
 		ProgressionStep step = next.get();
-		int contribution = Math.max(0, Math.min(step.requiredAmount(), amount));
-		setVillagerProgress(villager, getVillagerProgress(villager).withResourceContribution(contribution));
-		if (contribution == step.requiredAmount()) {
+		int contribution = Math.max(0, Math.min(step.requirements().get(material), amount));
+		Identifier itemId = BuiltInRegistries.ITEM.getKey(material);
+		setVillagerProgress(villager, getVillagerProgress(villager).withContribution(itemId, contribution));
+		if (hasAllRequirements(getVillagerProgress(villager), step)) {
 			completeProgression(player, villager, step);
 		}
 		return true;
 	}
 
 	public static boolean completeScrollUnlock(ServerPlayer player, Villager villager, ItemStack translatedScroll) {
-		if (!BlacksmithEligibility.isBlacksmithingEligible(villager)) {
+		if (!BlacksmithEligibility.isProgressionEligible(villager)) {
 			return false;
 		}
 
@@ -143,7 +155,7 @@ public final class ProgressionService {
 	}
 
 	private static Optional<ProgressionStep> nextTransferStep(Villager villager, String profession) {
-		if (!BlacksmithEligibility.isBlacksmithingEligible(villager)
+		if (!BlacksmithEligibility.isProgressionEligible(villager)
 				|| !BlacksmithEligibility.professionName(villager).equals(profession)) {
 			return Optional.empty();
 		}
@@ -166,7 +178,7 @@ public final class ProgressionService {
 
 	public static boolean completeProgression(ServerPlayer player, Villager villager) {
 		Optional<ProgressionStep> step = nextStep(villager);
-		return step.isPresent() && getVillagerProgress(villager).resourceContribution() >= step.get().requiredAmount()
+		return step.isPresent() && hasAllRequirements(getVillagerProgress(villager), step.get())
 				&& completeProgression(player, villager, step.get());
 	}
 
@@ -274,12 +286,15 @@ public final class ProgressionService {
 		ProgressionStep definition = step.get();
 		VillagerProgress progress = getVillagerProgress(villager)
 				.withResourceContribution(definition.requiredAmount());
+		for (var requirement : definition.additionalRequirements().entrySet()) {
+			progress = progress.withContribution(BuiltInRegistries.ITEM.getKey(requirement.getKey()), requirement.getValue());
+		}
 		setVillagerProgress(villager, progress);
 		return true;
 	}
 
 	public static boolean teachKnowledge(Villager villager, Identifier knowledgeId) {
-		if (!BlacksmithEligibility.isBlacksmithingEligible(villager)) {
+		if (!BlacksmithEligibility.isProgressionEligible(villager)) {
 			return false;
 		}
 		VillagerProgress progress = getVillagerProgress(villager);
@@ -295,7 +310,7 @@ public final class ProgressionService {
 	}
 
 	public static void addKnowledgeScrollTrades(Villager villager) {
-		if (!BlacksmithEligibility.isBlacksmithingEligible(villager)) {
+		if (!BlacksmithEligibility.isProgressionEligible(villager)) {
 			return;
 		}
 		String profession = BlacksmithEligibility.professionName(villager);
@@ -328,10 +343,6 @@ public final class ProgressionService {
 		RecipeProgression.refreshPlayerRecipes(player);
 	}
 
-	private static String displayName(Villager villager) {
-		return displayName(BlacksmithEligibility.professionName(villager));
-	}
-
 	public static String displayName(Identifier id) {
 		return displayName(id.getPath());
 	}
@@ -340,5 +351,22 @@ public final class ProgressionService {
 		return java.util.Arrays.stream(value.split("_"))
 				.map(part -> Character.toUpperCase(part.charAt(0)) + part.substring(1))
 				.collect(java.util.stream.Collectors.joining(" "));
+	}
+
+	private static int contribution(VillagerProgress progress, ProgressionStep step, Item material) {
+		Identifier id = BuiltInRegistries.ITEM.getKey(material);
+		if (progress.resourceContributions().containsKey(id)) {
+			return progress.contribution(id);
+		}
+		return material == step.requiredMaterial() ? progress.resourceContribution() : 0;
+	}
+
+	private static boolean hasAnyContribution(VillagerProgress progress, ProgressionStep step) {
+		return step.requirements().entrySet().stream().anyMatch(entry -> contribution(progress, step, entry.getKey()) > 0);
+	}
+
+	private static boolean hasAllRequirements(VillagerProgress progress, ProgressionStep step) {
+		return step.requirements().entrySet().stream()
+				.allMatch(entry -> contribution(progress, step, entry.getKey()) >= entry.getValue());
 	}
 }

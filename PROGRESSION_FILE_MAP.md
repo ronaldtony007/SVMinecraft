@@ -29,7 +29,7 @@ Resource criterion is complete
 Villager's vanilla rank and offers advance
          |
          v
-BlacksmithContributionHandler
+VillagerContributionHandler
         |
         v
 ProgressionService.contributeResource()
@@ -44,7 +44,7 @@ LibrarianTranslationHandler
 ModItems.giveTranslatedKnowledgeScroll()
         |
         v
-BlacksmithContributionHandler
+VillagerContributionHandler
         |
         v
 ProgressionService.completeScrollUnlock()
@@ -158,9 +158,9 @@ If a rule must work from a command, interaction, or mixin, put the rule here and
 
 ### `profession/BlacksmithEligibility.java`
 
-Identifies Toolsmith, Weaponsmith, and Armorer as eligible blacksmithing professions, and identifies Librarians.
+Identifies Toolsmith, Weaponsmith, Armorer, Farmer, Butcher, and Fisherman as progression professions, and identifies Librarians.
 
-The same resource, scroll, and knowledge mechanism applies to all three professions; only their recipe groups and advancement names differ.
+The same resource, scroll, and knowledge mechanism applies to all progression professions; only their recipe groups and advancement names differ.
 
 ## Player Interactions
 
@@ -168,12 +168,12 @@ The same resource, scroll, and knowledge mechanism applies to all three professi
 
 On villager interaction, asks the service to synchronize player unlocks and announce the current request. It does not change villager state itself.
 
-### `interaction/BlacksmithContributionHandler.java`
+### `interaction/VillagerContributionHandler.java`
 
 Handles two items used on villagers:
 
 - Generic translated knowledge scroll: completes the matching step and upgrades the villager if needed.
-- The material required by the current step: increments the request.
+- A material required by the current step: increments that material's request.
 
 The required item comes from `ProgressionStep`; this handler does not contain material-specific branches.
 
@@ -185,7 +185,7 @@ Consumes an untranslated scroll when used on a Librarian and gives a translated 
 
 ### `recipe/RecipeProgression.java`
 
-Maps completed profession technologies to player recipe features and awards only the matching vanilla recipe holders. It also removes gated recipes when the player does not own the feature. Netherite smithing remains vanilla-controlled.
+Maps completed profession technologies to player recipe features and awards only the matching vanilla recipe holders. It also removes gated recipes when the player does not own the feature, and checks food inputs in furnaces, smokers, and campfires. Netherite smithing remains vanilla-controlled.
 
 Add a new recipe group here when the definitions table gains a new technology.
 
@@ -274,7 +274,7 @@ The real loop is resource -> local progression -> emerald scroll trade -> Librar
 
 1. Add IDs in `TechnologyId`, `KnowledgeId`, and `PlayerFeatureId`.
 2. Add a `ProgressionStep` and its recipe IDs in `ProgressionDefinitions`.
-3. Add its output items to `CraftingMenuMixin`.
+3. Confirm the profession's recipe and cooking gates are covered by `RecipeProgression`.
 4. Confirm the profession is accepted by `BlacksmithEligibility`.
 5. Test resource contribution, scroll trade availability, Librarian translation, translated-scroll acceptance, recipes, and vanilla trade unlocking.
 

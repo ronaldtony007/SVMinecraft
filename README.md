@@ -1,6 +1,6 @@
 # Starter Mod
 
-This Fabric mod changes Minecraft technology progression so villagers teach the player each material tier.
+This Fabric mod changes Minecraft technology progression so villagers teach the player material tiers and food preparation.
 
 ## First Working Loop: Stoneworking
 
@@ -24,6 +24,8 @@ Blacksmith Novice
 ```
 
 The same engine applies to Toolsmiths, Weaponsmiths, and Armorers. The first interaction unlocks Stone immediately, Copper requires the Novice -> Apprentice upgrade, Iron and Gold require Apprentice -> Journeyman, Journeyman -> Expert has no requirement, and Diamond requires the Expert -> Master upgrade. Netherite remains vanilla smithing progression. The material, quantity, knowledge, and recipes are defined in `ProgressionDefinitions`, not in the interaction handlers.
+
+Farmers, Butchers, and Fishermen use the same progression engine for gated food recipes. Cooking inputs are checked server-side for furnaces, smokers, and campfires; recipes already in progress are allowed to finish.
 
 ## Requirements
 
@@ -70,9 +72,9 @@ To test the real loop:
 ## Architecture
 
 - `progression/ProgressionStep.java` describes one technology step and its rank requirement.
-- `progression/ProgressionDefinitions.java` contains the Toolsmith, Weaponsmith, and Armorer steps and recipe groups.
+- `progression/ProgressionDefinitions.java` contains all profession steps and recipe groups.
 - `progression/ProgressionService.java` runs local progression, scroll trades, Librarian translation, knowledge transfer, and advancement awarding.
-- `VillagerProgress` stores villager resource, knowledge, technology, rank, and compatible legacy scroll state.
+- `VillagerProgress` stores villager resource contributions, knowledge, technology, rank, and compatible legacy scroll state.
 - `PlayerProgress` stores player recipe features.
 - `RecipeProgression` awards recipes only after the matching feature is granted.
 - `RecipeBookGateMixin` blocks vanilla advancement recipe awards for gated blacksmith recipes.

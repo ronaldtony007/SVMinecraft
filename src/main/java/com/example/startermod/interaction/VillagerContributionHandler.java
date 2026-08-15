@@ -12,8 +12,8 @@ import net.minecraft.server.level.ServerLevel;
 import com.example.startermod.progression.ProgressionService;
 import com.example.startermod.item.ModItems;
 
-public final class BlacksmithContributionHandler {
-	private BlacksmithContributionHandler() {
+public final class VillagerContributionHandler {
+	private VillagerContributionHandler() {
 	}
 
 	public static void initialize() {
@@ -34,21 +34,21 @@ public final class BlacksmithContributionHandler {
 				if (!player.isCreative()) {
 					player.getItemInHand(hand).shrink(1);
 				}
-				serverPlayer.sendSystemMessage(Component.literal("The Blacksmith accepted the translated scroll."));
+				serverPlayer.sendSystemMessage(Component.literal("The villager accepted the translated scroll."));
 				return InteractionResult.SUCCESS;
 			}
 
 			var step = ProgressionService.nextStep(villager);
-			if (step.isEmpty() || !player.getItemInHand(hand).is(step.get().requiredMaterial())) {
+			ItemStack stack = player.getItemInHand(hand);
+			if (step.isEmpty() || step.get().requirements().keySet().stream().noneMatch(stack::is)) {
 				return InteractionResult.PASS;
 			}
 
-			if (!ProgressionService.contributeResource(serverPlayer, villager, step.get().requiredMaterial(), 1)) {
+			if (!ProgressionService.contributeResource(serverPlayer, villager, stack.getItem(), 1)) {
 				serverPlayer.sendSystemMessage(Component.literal("This villager is not requesting that material right now."));
 				return InteractionResult.SUCCESS;
 			}
 
-			ItemStack stack = player.getItemInHand(hand);
 			if (!player.isCreative()) {
 				stack.shrink(1);
 			}

@@ -4,6 +4,9 @@
 	"compatibilityLevel": "JAVA_25",
 	"mixins": [
 		"CraftingMenuMixin",
+		"CampfireBlockEntityMixin",
+		"FurnaceInputGateMixin",
+		"FurnaceQuickMoveGateMixin",
 		"VillagerTradesMixin",
 		"VillagerProgressionMixin",
 		"VillagerTradeGateMixin",

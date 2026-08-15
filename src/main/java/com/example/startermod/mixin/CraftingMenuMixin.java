@@ -20,7 +20,7 @@ import com.example.startermod.recipe.RecipeProgression;
 @Mixin(CraftingMenu.class)
 public final class CraftingMenuMixin {
 	@Inject(method = "slotChangedCraftingGrid", at = @At("TAIL"))
-	private static void startermod$gateLectern(
+	private static void startermod$gateLockedRecipe(
 			AbstractContainerMenu menu,
 			ServerLevel level,
 			Player player,

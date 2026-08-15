@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.example.startermod.command.VillagerProgressCommand;
-import com.example.startermod.interaction.BlacksmithContributionHandler;
+import com.example.startermod.interaction.VillagerContributionHandler;
 import com.example.startermod.interaction.LibrarianTranslationHandler;
 import com.example.startermod.interaction.VillagerMilestoneHandler;
 import com.example.startermod.item.ModItems;
@@ -25,7 +25,7 @@ public final class StarterMod implements ModInitializer {
 	public void onInitialize() {
 		ModAttachments.initialize();
 		ModItems.initialize();
-		BlacksmithContributionHandler.initialize();
+		VillagerContributionHandler.initialize();
 		VillagerMilestoneHandler.initialize();
 		LibrarianTranslationHandler.initialize();
 		VillagerProgressCommand.initialize();

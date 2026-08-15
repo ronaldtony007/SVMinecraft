@@ -17,6 +17,12 @@ public final class PlayerFeatureId {
 	public static final Identifier ARMORER_COPPER_RECIPES = StarterMod.id("armorer_copper_recipes");
 	public static final Identifier ARMORER_IRON_RECIPES = StarterMod.id("armorer_iron_recipes");
 	public static final Identifier ARMORER_DIAMOND_RECIPES = StarterMod.id("armorer_diamond_recipes");
+	public static final Identifier FARMER_APPRENTICE_FOOD = StarterMod.id("farmer_apprentice_food");
+	public static final Identifier FARMER_JOURNEYMAN_FOOD = StarterMod.id("farmer_journeyman_food");
+	public static final Identifier FARMER_MASTER_FOOD = StarterMod.id("farmer_master_food");
+	public static final Identifier BUTCHER_APPRENTICE_FOOD = StarterMod.id("butcher_apprentice_food");
+	public static final Identifier BUTCHER_JOURNEYMAN_FOOD = StarterMod.id("butcher_journeyman_food");
+	public static final Identifier FISHERMAN_APPRENTICE_FOOD = StarterMod.id("fisherman_apprentice_food");
 
 	private PlayerFeatureId() {
 	}
