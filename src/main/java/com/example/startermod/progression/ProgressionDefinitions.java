@@ -112,7 +112,7 @@ public final class ProgressionDefinitions {
 								"suspicious_stew_from_wither_rose", "suspicious_stew_from_orange_tulip"),
 						Map.of(Items.CARROT, 8)),
 				new ProgressionStep(TechnologyId.BUTCHER_APPRENTICE, KnowledgeId.BUTCHER_APPRENTICE, "butcher",
-						1, 2, Items.EGG, "Eggs", 32,
+						1, 2, Items.EGG, "Eggs", 8,
 						recipes("cooked_chicken", "cooked_chicken_from_smoking", "cooked_chicken_from_campfire_cooking",
 								"cooked_mutton", "cooked_mutton_from_smoking", "cooked_mutton_from_campfire_cooking",
 								"cooked_rabbit", "cooked_rabbit_from_smoking", "cooked_rabbit_from_campfire_cooking")),

@@ -25,7 +25,7 @@ Blacksmith Novice
 
 The same engine applies to Toolsmiths, Weaponsmiths, and Armorers. The first interaction unlocks Stone immediately, Copper requires the Novice -> Apprentice upgrade, Iron and Gold require Apprentice -> Journeyman, Journeyman -> Expert has no requirement, and Diamond requires the Expert -> Master upgrade. Netherite remains vanilla smithing progression. The material, quantity, knowledge, and recipes are defined in `ProgressionDefinitions`, not in the interaction handlers.
 
-Farmers, Butchers, and Fishermen use the same progression engine for gated food recipes. Cooking inputs are checked server-side for furnaces, smokers, and campfires; recipes already in progress are allowed to finish.
+Farmers, Butchers, and Fishermen use the same progression engine for gated food recipes. Furnace and smoker inputs are checked server-side; campfire cooking is always available, and recipes already in progress are allowed to finish.
 
 Shepherds provide rank-based color knowledge. The vanilla White Bed recipe is always available. The first Shepherd interaction unlocks colored beds, Apprentice unlocks basic dyes, Journeyman unlocks additional dyes, Expert unlocks the remaining dyes and banners, and Master unlocks painting. Shepherd recipes require no resource contributions.
 

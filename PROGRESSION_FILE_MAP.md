@@ -185,7 +185,7 @@ Consumes an untranslated scroll when used on a Librarian and gives a translated 
 
 ### `recipe/RecipeProgression.java`
 
-Maps completed profession technologies to player recipe features and awards only the matching vanilla recipe holders. It also removes gated recipes when the player does not own the feature, and checks food inputs in furnaces, smokers, and campfires. Shepherd colored beds, dyes, banners, and painting use the same recipe feature path; White Bed remains vanilla-controlled. Netherite smithing remains vanilla-controlled.
+Maps completed profession technologies to player recipe features and awards only the matching vanilla recipe holders. It also removes gated recipes when the player does not own the feature, and checks food inputs in furnaces and smokers; campfire cooking remains unrestricted. Shepherd colored beds, dyes, banners, and painting use the same recipe feature path; White Bed remains vanilla-controlled. Netherite smithing remains vanilla-controlled.
 
 Add a new recipe group here when the definitions table gains a new technology.
 

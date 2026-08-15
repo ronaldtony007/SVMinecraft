@@ -80,13 +80,12 @@ public final class RecipeProgression {
 	}
 
 	public static boolean isCampfireInputUnlocked(ServerPlayer player, ItemStack input) {
-		return isCookingInputUnlocked(player, input, RecipeType.CAMPFIRE_COOKING);
+		return true;
 	}
 
 	public static boolean isCookingInputUnlocked(ServerPlayer player, ItemStack input) {
 		return isCookingInputUnlocked(player, input, RecipeType.SMELTING)
-				&& isCookingInputUnlocked(player, input, RecipeType.SMOKING)
-				&& isCookingInputUnlocked(player, input, RecipeType.CAMPFIRE_COOKING);
+				&& isCookingInputUnlocked(player, input, RecipeType.SMOKING);
 	}
 
 	private static <T extends AbstractCookingRecipe> boolean isCookingInputUnlocked(ServerPlayer player, ItemStack input,
