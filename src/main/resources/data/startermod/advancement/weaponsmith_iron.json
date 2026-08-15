@@ -1,9 +1,9 @@
 {
-  "parent": "startermod:weaponsmith_stone",
+  "parent": "startermod:weaponsmith_copper",
   "display": {
     "icon": { "id": "minecraft:iron_ingot" },
     "title": { "text": "Weaponsmith: Iron Age" },
-    "description": { "text": "Complete Ironworking with a Weaponsmith" },
+    "description": { "text": "Complete Ironworking and Goldworking with a Weaponsmith" },
     "frame": "task",
     "announce_to_chat": true,
     "show_toast": true,

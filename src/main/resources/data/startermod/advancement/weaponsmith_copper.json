@@ -1,0 +1,13 @@
+{
+  "parent": "startermod:weaponsmith_stone",
+  "display": {
+    "icon": { "id": "minecraft:copper_ingot" },
+    "title": { "text": "Weaponsmith: Copper Age" },
+    "description": { "text": "Complete Copperworking with a Weaponsmith" },
+    "frame": "task",
+    "announce_to_chat": true,
+    "show_toast": true,
+    "hidden": false
+  },
+  "criteria": { "complete_progression": { "trigger": "minecraft:impossible" } }
+}

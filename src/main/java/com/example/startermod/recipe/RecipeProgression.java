@@ -18,16 +18,21 @@ public final class RecipeProgression {
 	}
 
 	public static Identifier featureFor(ProgressionStep step) {
-		if (step.technologyId().equals(TechnologyId.STONEWORKING)) {
-			return PlayerFeatureId.STONEWORKING_RECIPES;
-		}
-		if (step.technologyId().equals(TechnologyId.IRONWORKING)) {
-			return PlayerFeatureId.IRONWORKING_RECIPES;
-		}
-		if (step.technologyId().equals(TechnologyId.DIAMONDWORKING)) {
-			return PlayerFeatureId.DIAMONDWORKING_RECIPES;
-		}
-		return null;
+		boolean stone = step.technologyId().equals(TechnologyId.STONEWORKING);
+		boolean copper = step.technologyId().equals(TechnologyId.COPPERWORKING);
+		boolean iron = step.technologyId().equals(TechnologyId.IRONWORKING);
+		return switch (step.profession()) {
+			case "toolsmith" -> stone ? PlayerFeatureId.TOOLSMITH_STONE_RECIPES
+					: copper ? PlayerFeatureId.TOOLSMITH_COPPER_RECIPES
+							: iron ? PlayerFeatureId.TOOLSMITH_IRON_RECIPES : PlayerFeatureId.TOOLSMITH_DIAMOND_RECIPES;
+			case "weaponsmith" -> stone ? PlayerFeatureId.WEAPONSMITH_STONE_RECIPES
+					: copper ? PlayerFeatureId.WEAPONSMITH_COPPER_RECIPES
+							: iron ? PlayerFeatureId.WEAPONSMITH_IRON_RECIPES : PlayerFeatureId.WEAPONSMITH_DIAMOND_RECIPES;
+			case "armorer" -> stone ? PlayerFeatureId.ARMORER_STONE_RECIPES
+					: copper ? PlayerFeatureId.ARMORER_COPPER_RECIPES
+							: iron ? PlayerFeatureId.ARMORER_IRON_RECIPES : PlayerFeatureId.ARMORER_DIAMOND_RECIPES;
+			default -> null;
+		};
 	}
 
 	public static void refreshPlayerRecipes(ServerPlayer player) {

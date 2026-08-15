@@ -96,9 +96,11 @@ The content table. Current blacksmith definitions are:
 
 | Starting rank | Next rank | Material | Quantity | Player recipes |
 | --- | --- | --- | --- | --- |
-| Novice | Apprentice | Stone | 32 | Stone tools |
-| Apprentice | Journeyman | Iron ingot | 32 | Iron tools |
-| Expert | Master | Diamond | 16 | Diamond tools |
+| First Novice interaction | None | None | 0 | Profession-specific Stone recipes |
+| Novice | Apprentice | Copper ingot | 32 | Profession-specific Copper recipes |
+| Apprentice | Journeyman | Iron ingot | 32 | Profession-specific Iron and Gold recipes |
+| Journeyman | Expert | None | 0 | No new recipe tier |
+| Expert | Master | Diamond | 16 | Profession-specific Diamond recipes |
 
 To add a future profession, add definitions here. The handlers should not need a new `if` branch.
 
@@ -158,7 +160,7 @@ If a rule must work from a command, interaction, or mixin, put the rule here and
 
 Identifies Toolsmith, Weaponsmith, and Armorer as eligible blacksmithing professions, and identifies Librarians.
 
-The first definitions use Toolsmith. Later definitions can use other professions without changing the resource/scroll/knowledge mechanism.
+The same resource, scroll, and knowledge mechanism applies to all three professions; only their recipe groups and advancement names differ.
 
 ## Player Interactions
 
@@ -173,7 +175,7 @@ Handles two items used on villagers:
 - Generic translated knowledge scroll: completes the matching step and upgrades the villager if needed.
 - The material required by the current step: increments the request.
 
-The required item comes from `ProgressionStep`; this handler does not contain a Stone-only or Iron-only branch.
+The required item comes from `ProgressionStep`; this handler does not contain material-specific branches.
 
 ### `interaction/LibrarianTranslationHandler.java`
 
@@ -183,7 +185,7 @@ Consumes an untranslated scroll when used on a Librarian and gives a translated 
 
 ### `recipe/RecipeProgression.java`
 
-Maps completed technologies to player recipe features and awards the matching vanilla recipe holders. It also removes gated recipes when the player does not own the feature.
+Maps completed profession technologies to player recipe features and awards only the matching vanilla recipe holders. It also removes gated recipes when the player does not own the feature. Netherite smithing remains vanilla-controlled.
 
 Add a new recipe group here when the definitions table gains a new technology.
 
@@ -195,7 +197,7 @@ Without this mixin, the recipe book may unlock stone tools from the normal Minec
 
 ### `mixin/CraftingMenuMixin.java`
 
-Final server-side safety gate. Even if a client has stale recipe data, the locked stone/iron/diamond tool result is removed unless the corresponding player feature exists.
+Final server-side safety gate. Even if a client has stale recipe data, a gated recipe result is removed unless the player owns the matching profession and technology feature.
 
 ## Villager Trade Mixins
 
