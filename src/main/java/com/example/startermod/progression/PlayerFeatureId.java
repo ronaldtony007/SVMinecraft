@@ -33,6 +33,8 @@ public final class PlayerFeatureId {
 	public static final Identifier FLETCHER_TIPPED_ARROWS = StarterMod.id("fletcher_tipped_arrows");
 	public static final Identifier LIBRARIAN_BOOKS = StarterMod.id("librarian_books");
 	public static final Identifier ENCHANTING = StarterMod.id("enchanting");
+	public static final Identifier CLERIC_NETHER_ACCESS = StarterMod.id("cleric_nether_access");
+	public static final Identifier CLERIC_ENDER_CRAFTING = StarterMod.id("cleric_ender_crafting");
 
 	private PlayerFeatureId() {
 	}

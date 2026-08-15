@@ -55,6 +55,8 @@ public final class RecipeProgression {
 							? PlayerFeatureId.FLETCHER_CROSSBOW : PlayerFeatureId.FLETCHER_TIPPED_ARROWS;
 			case "librarian" -> step.technologyId().equals(TechnologyId.LIBRARIAN_BOOKS)
 					? PlayerFeatureId.LIBRARIAN_BOOKS : PlayerFeatureId.ENCHANTING;
+			case "cleric" -> step.technologyId().equals(TechnologyId.CLERIC_NETHER_ACCESS)
+					? PlayerFeatureId.CLERIC_NETHER_ACCESS : PlayerFeatureId.CLERIC_ENDER_CRAFTING;
 			default -> null;
 		};
 	}

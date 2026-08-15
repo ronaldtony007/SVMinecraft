@@ -33,6 +33,8 @@ Fletchers provide ranged-combat progression rather than a renewable emerald sour
 
 Librarians unlock Paper, Book, and Bookshelf recipes on their first Novice interaction. After reaching Apprentice, they require 4 Obsidian Blocks to unlock Enchanting, which gates the Enchanting Table recipe and enchanted-book Anvil operations server-side. Later Librarian ranks and trades remain vanilla.
 
+Clerics unlock Nether access at Apprentice. Before then, Flint and Steel cannot light an obsidian Nether portal. At Expert, they unlock Ender Eye and Ender Chest crafting.
+
 ## Requirements
 
 - JDK 25

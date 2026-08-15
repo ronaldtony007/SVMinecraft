@@ -78,6 +78,7 @@ public final class ProgressionDefinitions {
 	private static final Set<Identifier> FLETCHER_TIPPED_ARROW_RECIPES = recipes("tipped_arrow");
 	private static final Set<Identifier> LIBRARIAN_BOOK_RECIPES = recipes("paper", "book", "bookshelf");
 	private static final Set<Identifier> ENCHANTING_RECIPES = recipes("enchanting_table");
+	private static final Set<Identifier> CLERIC_ENDER_RECIPES = recipes("ender_eye", "ender_chest");
 
 	private static final List<ProgressionStep> STEPS = java.util.stream.Stream.concat(
 			BLACKSMITH_PROFESSIONS.stream()
@@ -93,7 +94,8 @@ public final class ProgressionDefinitions {
 			).stream()),
 			java.util.stream.Stream.concat(foodSteps().stream(),
 					java.util.stream.Stream.concat(shepherdSteps().stream(),
-							java.util.stream.Stream.concat(fletcherSteps().stream(), librarianSteps().stream()))))
+							java.util.stream.Stream.concat(fletcherSteps().stream(),
+									java.util.stream.Stream.concat(librarianSteps().stream(), clericSteps().stream())))))
 			.toList();
 
 	private static List<ProgressionStep> foodSteps() {
@@ -169,6 +171,14 @@ public final class ProgressionDefinitions {
 						"librarian", 1, 1, Items.AIR, "None", 0, LIBRARIAN_BOOK_RECIPES),
 				new ProgressionStep(TechnologyId.ENCHANTING, KnowledgeId.ENCHANTING,
 						"librarian", 1, 2, Items.OBSIDIAN, "Obsidian Blocks", 4, ENCHANTING_RECIPES));
+	}
+
+	private static List<ProgressionStep> clericSteps() {
+		return List.of(
+				new ProgressionStep(TechnologyId.CLERIC_NETHER_ACCESS, KnowledgeId.CLERIC_NETHER_ACCESS,
+						"cleric", 1, 2, Items.AIR, "None", 0, Set.of()),
+				new ProgressionStep(TechnologyId.CLERIC_ENDER_CRAFTING, KnowledgeId.CLERIC_ENDER_CRAFTING,
+						"cleric", 3, 4, Items.AIR, "None", 0, CLERIC_ENDER_RECIPES));
 	}
 
 	private ProgressionDefinitions() {
