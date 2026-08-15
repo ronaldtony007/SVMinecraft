@@ -11,27 +11,27 @@ public final class ProgressionDefinitions {
 	private static final Set<String> BLACKSMITH_PROFESSIONS = Set.of("toolsmith", "weaponsmith", "armorer");
 
 	private static final Set<Identifier> TOOLSMITH_STONE_RECIPES = recipes(
-			"stone_pickaxe", "stone_axe", "stone_shovel", "stone_hoe");
+			"stone_pickaxe", "stone_axe", "stone_shovel", "stone_hoe", "furnace");
 	private static final Set<Identifier> TOOLSMITH_COPPER_RECIPES = recipes(
 			"copper_pickaxe", "copper_axe", "copper_shovel", "copper_hoe");
 	private static final Set<Identifier> TOOLSMITH_IRON_RECIPES = recipes(
 			"iron_pickaxe", "iron_axe", "iron_shovel", "iron_hoe",
 			"golden_pickaxe", "golden_axe", "golden_shovel", "golden_hoe",
-			"bucket", "shears");
+			"bucket", "shears", "blast_furnace");
 	private static final Set<Identifier> TOOLSMITH_DIAMOND_RECIPES = recipes(
 			"diamond_pickaxe", "diamond_axe", "diamond_shovel", "diamond_hoe");
-	private static final Set<Identifier> WEAPONSMITH_STONE_RECIPES = recipes("stone_sword", "stone_spear");
+	private static final Set<Identifier> WEAPONSMITH_STONE_RECIPES = recipes("stone_sword", "stone_spear", "furnace");
 	private static final Set<Identifier> WEAPONSMITH_COPPER_RECIPES = recipes("copper_sword", "copper_spear");
 	private static final Set<Identifier> WEAPONSMITH_IRON_RECIPES = recipes(
-			"iron_sword", "iron_spear", "golden_sword", "golden_spear", "shield");
+			"iron_sword", "iron_spear", "golden_sword", "golden_spear", "shield", "blast_furnace");
 	private static final Set<Identifier> WEAPONSMITH_DIAMOND_RECIPES = recipes("diamond_sword", "diamond_spear");
 	private static final Set<Identifier> ARMORER_STONE_RECIPES = recipes(
-			"leather_helmet", "leather_chestplate", "leather_leggings", "leather_boots");
+			"leather_helmet", "leather_chestplate", "leather_leggings", "leather_boots", "furnace");
 	private static final Set<Identifier> ARMORER_COPPER_RECIPES = recipes(
 			"copper_helmet", "copper_chestplate", "copper_leggings", "copper_boots");
 	private static final Set<Identifier> ARMORER_IRON_RECIPES = recipes(
 			"iron_helmet", "iron_chestplate", "iron_leggings", "iron_boots",
-			"golden_helmet", "golden_chestplate", "golden_leggings", "golden_boots");
+			"golden_helmet", "golden_chestplate", "golden_leggings", "golden_boots", "blast_furnace");
 	private static final Set<Identifier> ARMORER_DIAMOND_RECIPES = recipes(
 			"diamond_helmet", "diamond_chestplate", "diamond_leggings", "diamond_boots");
 
