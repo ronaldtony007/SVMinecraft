@@ -12,6 +12,7 @@ import com.example.startermod.interaction.BlacksmithContributionHandler;
 import com.example.startermod.interaction.LibrarianTranslationHandler;
 import com.example.startermod.interaction.VillagerMilestoneHandler;
 import com.example.startermod.item.ModItems;
+import com.example.startermod.persistence.ModAttachments;
 import com.example.startermod.recipe.RecipeProgression;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 
@@ -22,6 +23,7 @@ public final class StarterMod implements ModInitializer {
 
 	@Override
 	public void onInitialize() {
+		ModAttachments.initialize();
 		ModItems.initialize();
 		BlacksmithContributionHandler.initialize();
 		VillagerMilestoneHandler.initialize();

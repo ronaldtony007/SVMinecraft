@@ -21,4 +21,8 @@ public final class ModAttachments {
 
 	private ModAttachments() {
 	}
+
+	public static void initialize() {
+		// Force attachment registration before saved entities are loaded.
+	}
 }
