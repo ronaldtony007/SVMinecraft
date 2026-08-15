@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "minecraft:item/book"
+    "layer0": "silvers_villagers:item/translated_knowledge_scroll"
   }
 }
