@@ -1,6 +1,7 @@
 package com.example.startermod.progression;
 
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
@@ -74,8 +75,7 @@ public final class ProgressionService {
 		}
 		if (!hasAnyContribution(progress, step)) {
 			player.sendSystemMessage(Component.literal(
-					"Provide " + step.requiredAmount() + " " + step.materialName()
-							+ " to upgrade to the next level (0/" + step.requiredAmount() + ")."));
+					"Provide " + requirementSummary(step) + " to upgrade to the next level."));
 		}
 		return true;
 	}
@@ -359,6 +359,14 @@ public final class ProgressionService {
 		addKnowledgeScrollTrades(villager);
 	}
 
+	public static void removeFletcherStickTrade(Villager villager) {
+		if (!BlacksmithEligibility.isFletcher(villager)) {
+			return;
+		}
+		villager.getOffers().removeIf(offer -> offer.getBaseCostA().getItem() == Items.STICK
+				&& offer.getResult().getItem() == Items.EMERALD);
+	}
+
 	public static void reset(Villager villager, ServerPlayer player) {
 		setVillagerProgress(villager, VillagerProgress.empty());
 		setPlayerProgress(player, PlayerProgress.empty());
@@ -390,5 +398,13 @@ public final class ProgressionService {
 	private static boolean hasAllRequirements(VillagerProgress progress, ProgressionStep step) {
 		return step.requirements().entrySet().stream()
 				.allMatch(entry -> contribution(progress, step, entry.getKey()) >= entry.getValue());
+	}
+
+	private static String requirementSummary(ProgressionStep step) {
+		return step.requirements().entrySet().stream()
+				.filter(entry -> entry.getValue() > 0)
+				.map(entry -> (entry.getKey() == step.requiredMaterial() ? step.materialName()
+						: displayName(BuiltInRegistries.ITEM.getKey(entry.getKey()))) + " " + entry.getValue())
+				.collect(Collectors.joining(" + "));
 	}
 }

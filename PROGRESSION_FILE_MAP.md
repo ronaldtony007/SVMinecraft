@@ -162,6 +162,8 @@ Identifies Toolsmith, Weaponsmith, Armorer, Farmer, Butcher, Fisherman, and Shep
 
 The resource, scroll, and knowledge mechanism applies to the resource professions. Shepherds use the same persistent player recipe features and rank synchronization, but do not use resource contributions or knowledge-scroll trades.
 
+Fletchers use the same persistent villager and player progression state. Apprentice requires 3 String + 3 Sticks for Bow and Arrow recipes, Journeyman unlocks Crossbow, and Master unlocks Tipped Arrow crafting. Fletcher Stick-to-Emerald offers are removed after vanilla trade generation; loot and drops are not gated.
+
 ## Player Interactions
 
 ### `interaction/VillagerMilestoneHandler.java`

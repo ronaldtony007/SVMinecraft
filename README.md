@@ -29,6 +29,8 @@ Farmers, Butchers, and Fishermen use the same progression engine for gated food 
 
 Shepherds provide rank-based color knowledge. The vanilla White Bed recipe is always available. The first Shepherd interaction unlocks colored beds, Apprentice unlocks basic dyes, Journeyman unlocks additional dyes, Expert unlocks the remaining dyes and banners, and Master unlocks painting. Shepherd recipes require no resource contributions.
 
+Fletchers provide ranged-combat progression rather than a renewable emerald source. The vanilla Stick-to-Emerald trade is removed. Apprentice requires 3 String + 3 Sticks and unlocks Bow and Arrow crafting, Journeyman unlocks Crossbow crafting, and Master unlocks Tipped Arrow crafting. These crafting recipes are gated without affecting loot or mob drops.
+
 ## Requirements
 
 - JDK 25
@@ -82,5 +84,6 @@ To test the real loop:
 - `RecipeBookGateMixin` blocks vanilla advancement recipe awards for gated blacksmith recipes.
 - `CraftingMenuMixin` is the final server-side crafting safety check.
 - Shepherd dye, colored-bed, banner, and painting recipes are gated both in the recipe book and in the server-side crafting result.
+- Fletcher bow, arrow, crossbow, and tipped-arrow recipes use the same recipe-book and server-side crafting gates; Fletcher Stick-to-Emerald offers are removed from vanilla trade generation.
 
 See `PROGRESSION_FILE_MAP.md` for the file connection map.

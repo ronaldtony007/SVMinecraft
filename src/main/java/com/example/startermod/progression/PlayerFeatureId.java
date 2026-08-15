@@ -28,6 +28,9 @@ public final class PlayerFeatureId {
 	public static final Identifier SHEPHERD_JOURNEYMAN_DYES = StarterMod.id("shepherd_journeyman_dyes");
 	public static final Identifier SHEPHERD_EXPERT_DYES = StarterMod.id("shepherd_expert_dyes");
 	public static final Identifier SHEPHERD_MASTER_PAINTING = StarterMod.id("shepherd_master_painting");
+	public static final Identifier FLETCHER_BOW_AND_ARROWS = StarterMod.id("fletcher_bow_and_arrows");
+	public static final Identifier FLETCHER_CROSSBOW = StarterMod.id("fletcher_crossbow");
+	public static final Identifier FLETCHER_TIPPED_ARROWS = StarterMod.id("fletcher_tipped_arrows");
 
 	private PlayerFeatureId() {
 	}

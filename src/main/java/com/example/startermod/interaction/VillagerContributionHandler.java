@@ -39,8 +39,13 @@ public final class VillagerContributionHandler {
 			}
 
 			var step = ProgressionService.nextStep(villager);
+			if (step.isPresent() && step.get().requirements().values().stream().allMatch(amount -> amount == 0)) {
+				ProgressionService.requestNextResource(serverPlayer, villager);
+				step = ProgressionService.nextStep(villager);
+			}
 			ItemStack stack = player.getItemInHand(hand);
-			if (step.isEmpty() || step.get().requirements().keySet().stream().noneMatch(stack::is)) {
+			if (step.isEmpty() || step.get().requirements().values().stream().allMatch(amount -> amount == 0)
+					|| step.get().requirements().keySet().stream().noneMatch(stack::is)) {
 				return InteractionResult.PASS;
 			}
 

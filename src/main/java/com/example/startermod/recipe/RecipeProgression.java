@@ -48,7 +48,11 @@ public final class RecipeProgression {
 							: step.technologyId().equals(TechnologyId.SHEPHERD_JOURNEYMAN)
 									? PlayerFeatureId.SHEPHERD_JOURNEYMAN_DYES
 									: step.technologyId().equals(TechnologyId.SHEPHERD_EXPERT)
-											? PlayerFeatureId.SHEPHERD_EXPERT_DYES : PlayerFeatureId.SHEPHERD_MASTER_PAINTING;
+									? PlayerFeatureId.SHEPHERD_EXPERT_DYES : PlayerFeatureId.SHEPHERD_MASTER_PAINTING;
+			case "fletcher" -> step.technologyId().equals(TechnologyId.FLETCHER_BOW_AND_ARROWS)
+					? PlayerFeatureId.FLETCHER_BOW_AND_ARROWS
+					: step.technologyId().equals(TechnologyId.FLETCHER_CROSSBOW)
+							? PlayerFeatureId.FLETCHER_CROSSBOW : PlayerFeatureId.FLETCHER_TIPPED_ARROWS;
 			default -> null;
 		};
 	}

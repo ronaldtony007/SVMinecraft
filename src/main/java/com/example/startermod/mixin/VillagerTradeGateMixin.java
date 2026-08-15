@@ -20,11 +20,15 @@ public abstract class VillagerTradeGateMixin {
 
 	@Inject(method = "updateTrades", at = @At("TAIL"))
 	private void startermod$appendScrollTrades(ServerLevel level, CallbackInfo info) {
-		ProgressionService.addKnowledgeScrollTrades((Villager) (Object) this);
+		Villager villager = (Villager) (Object) this;
+		ProgressionService.addKnowledgeScrollTrades(villager);
+		ProgressionService.removeFletcherStickTrade(villager);
 	}
 
 	@Inject(method = "startTrading", at = @At("HEAD"))
 	private void startermod$normalizeScrollTrades(Player player, CallbackInfo info) {
-		ProgressionService.normalizeKnowledgeScrollTrades((Villager) (Object) this);
+		Villager villager = (Villager) (Object) this;
+		ProgressionService.normalizeKnowledgeScrollTrades(villager);
+		ProgressionService.removeFletcherStickTrade(villager);
 	}
 }

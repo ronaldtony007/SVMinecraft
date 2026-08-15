@@ -73,6 +73,9 @@ public final class ProgressionDefinitions {
 			"cyan_banner_duplicate", "purple_banner_duplicate", "blue_banner_duplicate",
 			"brown_banner_duplicate", "green_banner_duplicate", "red_banner_duplicate", "black_banner_duplicate");
 	private static final Set<Identifier> SHEPHERD_MASTER_RECIPES = recipes("painting");
+	private static final Set<Identifier> FLETCHER_BOW_AND_ARROW_RECIPES = recipes("bow", "arrow");
+	private static final Set<Identifier> FLETCHER_CROSSBOW_RECIPES = recipes("crossbow");
+	private static final Set<Identifier> FLETCHER_TIPPED_ARROW_RECIPES = recipes("tipped_arrow");
 
 	private static final List<ProgressionStep> STEPS = java.util.stream.Stream.concat(
 			BLACKSMITH_PROFESSIONS.stream()
@@ -86,7 +89,8 @@ public final class ProgressionDefinitions {
 					new ProgressionStep(TechnologyId.DIAMONDWORKING, KnowledgeId.DIAMONDWORKING, profession,
 							3, 5, Items.DIAMOND, "Diamond", 16, recipesFor(profession, "diamond"))
 			).stream()),
-			java.util.stream.Stream.concat(foodSteps().stream(), shepherdSteps().stream()))
+			java.util.stream.Stream.concat(foodSteps().stream(),
+					java.util.stream.Stream.concat(shepherdSteps().stream(), fletcherSteps().stream())))
 			.toList();
 
 	private static List<ProgressionStep> foodSteps() {
@@ -141,6 +145,18 @@ public final class ProgressionDefinitions {
 						"shepherd", 3, 4, Items.AIR, "None", 0, SHEPHERD_EXPERT_DYE_RECIPES),
 				new ProgressionStep(TechnologyId.SHEPHERD_MASTER, KnowledgeId.SHEPHERD_MASTER,
 						"shepherd", 4, 5, Items.AIR, "None", 0, SHEPHERD_MASTER_RECIPES)
+		);
+	}
+
+	private static List<ProgressionStep> fletcherSteps() {
+		return List.of(
+				new ProgressionStep(TechnologyId.FLETCHER_BOW_AND_ARROWS, KnowledgeId.FLETCHER_BOW_AND_ARROWS,
+						"fletcher", 1, 2, Items.STRING, "String", 3, FLETCHER_BOW_AND_ARROW_RECIPES,
+						Map.of(Items.STICK, 3)),
+				new ProgressionStep(TechnologyId.FLETCHER_CROSSBOW, KnowledgeId.FLETCHER_CROSSBOW,
+						"fletcher", 2, 3, Items.AIR, "None", 0, FLETCHER_CROSSBOW_RECIPES),
+				new ProgressionStep(TechnologyId.FLETCHER_TIPPED_ARROWS, KnowledgeId.FLETCHER_TIPPED_ARROWS,
+						"fletcher", 3, 5, Items.AIR, "None", 0, FLETCHER_TIPPED_ARROW_RECIPES)
 		);
 	}
 

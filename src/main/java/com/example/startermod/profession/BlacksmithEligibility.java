@@ -12,7 +12,7 @@ public final class BlacksmithEligibility {
 	}
 
 	public static boolean isProgressionEligible(Villager villager) {
-		return isBlacksmithingProfession(villager) || isFoodProfession(villager);
+		return isBlacksmithingProfession(villager) || isFoodProfession(villager) || isFletcher(villager);
 	}
 
 	public static boolean isRankOnlyProfession(Villager villager) {
@@ -33,6 +33,10 @@ public final class BlacksmithEligibility {
 		return villager.getVillagerData().profession().is(VillagerProfession.FARMER)
 				|| villager.getVillagerData().profession().is(VillagerProfession.BUTCHER)
 				|| villager.getVillagerData().profession().is(VillagerProfession.FISHERMAN);
+	}
+
+	public static boolean isFletcher(Villager villager) {
+		return villager.getVillagerData().profession().is(VillagerProfession.FLETCHER);
 	}
 
 	public static String professionName(Villager villager) {
