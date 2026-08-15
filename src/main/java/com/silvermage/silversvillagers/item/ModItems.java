@@ -59,6 +59,11 @@ public final class ModItems {
 				.copyTag().getStringOr("profession", "");
 	}
 
+	public static String scrollRank(ItemStack stack) {
+		return stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY)
+				.copyTag().getStringOr("rank", "");
+	}
+
 	private static ItemStack scroll(Item item, String technology, String profession, String rank, boolean translated) {
 		ItemStack stack = new ItemStack(item);
 		String suffix = translated ? " Translated Scroll" : " Scroll";
