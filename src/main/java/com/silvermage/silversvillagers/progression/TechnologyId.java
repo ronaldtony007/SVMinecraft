@@ -1,0 +1,35 @@
+package com.silvermage.silversvillagers.progression;
+
+import net.minecraft.resources.Identifier;
+
+import com.silvermage.silversvillagers.StarterMod;
+
+public final class TechnologyId {
+	public static final Identifier STONEWORKING = StarterMod.id("stoneworking");
+	public static final Identifier COPPERWORKING = StarterMod.id("copperworking");
+	public static final Identifier IRONWORKING = StarterMod.id("ironworking");
+	public static final Identifier DIAMONDWORKING = StarterMod.id("diamondworking");
+	public static final Identifier FARMER_APPRENTICE = StarterMod.id("farmer_apprentice_food");
+	public static final Identifier FARMER_JOURNEYMAN = StarterMod.id("farmer_journeyman_food");
+	public static final Identifier FARMER_MASTER = StarterMod.id("farmer_master_food");
+	public static final Identifier BUTCHER_APPRENTICE = StarterMod.id("butcher_apprentice_food");
+	public static final Identifier BUTCHER_JOURNEYMAN = StarterMod.id("butcher_journeyman_food");
+	public static final Identifier FISHERMAN_APPRENTICE = StarterMod.id("fisherman_apprentice_food");
+	public static final Identifier SHEPHERD_COLORED_BEDS = StarterMod.id("shepherd_colored_beds");
+	public static final Identifier SHEPHERD_APPRENTICE = StarterMod.id("shepherd_apprentice_dyes");
+	public static final Identifier SHEPHERD_JOURNEYMAN = StarterMod.id("shepherd_journeyman_dyes");
+	public static final Identifier SHEPHERD_EXPERT = StarterMod.id("shepherd_expert_dyes");
+	public static final Identifier SHEPHERD_MASTER = StarterMod.id("shepherd_master_painting");
+	public static final Identifier FLETCHER_BOW_AND_ARROWS = StarterMod.id("bow_and_arrows");
+	public static final Identifier FLETCHER_CROSSBOW = StarterMod.id("crossbow");
+	public static final Identifier FLETCHER_TIPPED_ARROWS = StarterMod.id("tipped_arrows");
+	public static final Identifier LIBRARIAN_BOOKS = StarterMod.id("librarian_books");
+	public static final Identifier ENCHANTING = StarterMod.id("enchanting");
+	public static final Identifier CLERIC_NETHER_ACCESS = StarterMod.id("cleric_nether_access");
+	public static final Identifier CLERIC_ENDER_CRAFTING = StarterMod.id("cleric_ender_crafting");
+	public static final Identifier LEATHERWORKER_EXPERT_ARMOR = StarterMod.id("leatherworker_expert_armor");
+	public static final Identifier LEATHERWORKER_MASTER_SADDLE = StarterMod.id("leatherworker_master_saddle");
+
+	private TechnologyId() {
+	}
+}

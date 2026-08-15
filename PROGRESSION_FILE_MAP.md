@@ -52,7 +52,7 @@ ProgressionService.completeScrollUnlock()
         +--> VillagerProgress: unlock next trade rank
          +--> PlayerProgress: unlock recipe feature
          +--> RecipeProgression: send recipes to recipe book
-         +--> data/startermod/advancement/{profession}_{age}.json: award age
+          +--> data/silvers_villagers/advancement/{profession}_{age}.json: award age
          +--> vanilla villager offers: next tier available
 ```
 
@@ -226,23 +226,23 @@ Registers two generic item types:
 
 The displayed name includes the technology, profession, and rank. The item type is generic so future technologies do not require new item classes.
 
-### `assets/startermod/items/*.json`
+### `assets/silvers_villagers/items/*.json`
 
 Connect registered item IDs to item models.
 
-### `assets/startermod/models/item/*.json`
+### `assets/silvers_villagers/models/item/*.json`
 
 Choose the visual texture: paper for the untranslated scroll and book for the translated scroll.
 
-### `assets/startermod/lang/en_us.json`
+### `assets/silvers_villagers/lang/en_us.json`
 
 Fallback names for the generic item types. Runtime custom names are produced by `ModItems`.
 
-### `data/startermod/advancement/villager_progression.json`
+### `data/silvers_villagers/advancement/villager_progression.json`
 
 Root of the Villager Progression advancement tree. It is completed by the first vanilla villager trade or when progression starts through a translated scroll.
 
-### `data/startermod/advancement/{profession}_{age}.json`
+### `data/silvers_villagers/advancement/{profession}_{age}.json`
 
 The nine profession-specific nodes awarded when the player learns Stoneworking, Ironworking, or Diamondworking from the matching Toolsmith, Weaponsmith, or Armorer. These nodes have no recipe rewards; recipes remain controlled by the villager progression system.
 
@@ -250,7 +250,7 @@ The nine profession-specific nodes awarded when the player learns Stoneworking, 
 
 Declares the main entrypoint and common mixin configuration.
 
-### `startermod.mixins.json`
+### `silversvillagers.mixins.json`
 
 Lists common mixins, including the recipe-book gate.
 

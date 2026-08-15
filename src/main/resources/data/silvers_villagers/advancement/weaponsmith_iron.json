@@ -1,0 +1,13 @@
+{
+  "parent": "silvers_villagers:weaponsmith_copper",
+  "display": {
+    "icon": { "id": "minecraft:iron_ingot" },
+    "title": { "text": "Weaponsmith: Iron Age" },
+    "description": { "text": "Complete Ironworking and Goldworking with a Weaponsmith" },
+    "frame": "task",
+    "announce_to_chat": true,
+    "show_toast": true,
+    "hidden": false
+  },
+  "criteria": { "complete_progression": { "trigger": "minecraft:impossible" } }
+}

@@ -10,4 +10,4 @@ pluginManagement {
 }
 
 // Should match the mod ID in fabric.mod.json
-rootProject.name = 'startermod'
+rootProject.name = 'silvers_villagers'

@@ -1,4 +1,4 @@
-# Starter Mod
+# Silver's Villagers
 
 This Fabric mod changes Minecraft technology progression so villagers teach the player material tiers and food preparation.
 
