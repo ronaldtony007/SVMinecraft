@@ -57,6 +57,8 @@ public final class RecipeProgression {
 					? PlayerFeatureId.LIBRARIAN_BOOKS : PlayerFeatureId.ENCHANTING;
 			case "cleric" -> step.technologyId().equals(TechnologyId.CLERIC_NETHER_ACCESS)
 					? PlayerFeatureId.CLERIC_NETHER_ACCESS : PlayerFeatureId.CLERIC_ENDER_CRAFTING;
+			case "leatherworker" -> step.technologyId().equals(TechnologyId.LEATHERWORKER_EXPERT_ARMOR)
+					? PlayerFeatureId.LEATHERWORKER_EXPERT_ARMOR : PlayerFeatureId.LEATHERWORKER_MASTER_SADDLE;
 			default -> null;
 		};
 	}

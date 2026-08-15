@@ -79,6 +79,8 @@ public final class ProgressionDefinitions {
 	private static final Set<Identifier> LIBRARIAN_BOOK_RECIPES = recipes("paper", "book", "bookshelf");
 	private static final Set<Identifier> ENCHANTING_RECIPES = recipes("enchanting_table");
 	private static final Set<Identifier> CLERIC_ENDER_RECIPES = recipes("ender_eye", "ender_chest");
+	private static final Set<Identifier> LEATHERWORKER_EXPERT_RECIPES = recipes("leather_horse_armor", "wolf_armor");
+	private static final Set<Identifier> LEATHERWORKER_MASTER_RECIPES = recipes("saddle");
 
 	private static final List<ProgressionStep> STEPS = java.util.stream.Stream.concat(
 			BLACKSMITH_PROFESSIONS.stream()
@@ -95,7 +97,8 @@ public final class ProgressionDefinitions {
 			java.util.stream.Stream.concat(foodSteps().stream(),
 					java.util.stream.Stream.concat(shepherdSteps().stream(),
 							java.util.stream.Stream.concat(fletcherSteps().stream(),
-									java.util.stream.Stream.concat(librarianSteps().stream(), clericSteps().stream())))))
+									java.util.stream.Stream.concat(librarianSteps().stream(),
+											java.util.stream.Stream.concat(clericSteps().stream(), leatherworkerSteps().stream()))))))
 			.toList();
 
 	private static List<ProgressionStep> foodSteps() {
@@ -179,6 +182,14 @@ public final class ProgressionDefinitions {
 						"cleric", 1, 2, Items.AIR, "None", 0, Set.of()),
 				new ProgressionStep(TechnologyId.CLERIC_ENDER_CRAFTING, KnowledgeId.CLERIC_ENDER_CRAFTING,
 						"cleric", 3, 4, Items.AIR, "None", 0, CLERIC_ENDER_RECIPES));
+	}
+
+	private static List<ProgressionStep> leatherworkerSteps() {
+		return List.of(
+				new ProgressionStep(TechnologyId.LEATHERWORKER_EXPERT_ARMOR, KnowledgeId.LEATHERWORKER_EXPERT_ARMOR,
+						"leatherworker", 3, 4, Items.AIR, "None", 0, LEATHERWORKER_EXPERT_RECIPES),
+				new ProgressionStep(TechnologyId.LEATHERWORKER_MASTER_SADDLE, KnowledgeId.LEATHERWORKER_MASTER_SADDLE,
+						"leatherworker", 4, 5, Items.AIR, "None", 0, LEATHERWORKER_MASTER_RECIPES));
 	}
 
 	private ProgressionDefinitions() {

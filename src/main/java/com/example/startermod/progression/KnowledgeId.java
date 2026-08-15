@@ -27,6 +27,8 @@ public final class KnowledgeId {
 	public static final Identifier ENCHANTING = StarterMod.id("enchanting");
 	public static final Identifier CLERIC_NETHER_ACCESS = StarterMod.id("cleric_nether_access");
 	public static final Identifier CLERIC_ENDER_CRAFTING = StarterMod.id("cleric_ender_crafting");
+	public static final Identifier LEATHERWORKER_EXPERT_ARMOR = StarterMod.id("leatherworker_expert_armor");
+	public static final Identifier LEATHERWORKER_MASTER_SADDLE = StarterMod.id("leatherworker_master_saddle");
 
 	private KnowledgeId() {
 	}

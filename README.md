@@ -35,6 +35,8 @@ Librarians unlock Paper, Book, and Bookshelf recipes on their first Novice inter
 
 Clerics unlock Nether access at Apprentice. Before then, Flint and Steel cannot light an obsidian Nether portal. At Expert, they unlock Ender Eye and Ender Chest crafting.
 
+Leatherworkers leave basic leather, rabbit hide, and leather armor functionality unchanged. Expert unlocks Leather Horse Armor and Wolf Armor crafting, while Master unlocks Saddle crafting. Existing horse armor from vanilla loot and other sources remains usable.
+
 ## Requirements
 
 - JDK 25
