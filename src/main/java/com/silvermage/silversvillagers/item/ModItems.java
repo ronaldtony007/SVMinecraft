@@ -13,6 +13,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.core.Registry;
 import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.component.CustomData;
 
@@ -60,6 +61,9 @@ public final class ModItems {
 
 	private static ItemStack scroll(Item item, String technology, String profession, String rank, boolean translated) {
 		ItemStack stack = new ItemStack(item);
+		String suffix = translated ? " Translated Scroll" : " Scroll";
+		stack.set(DataComponents.CUSTOM_NAME,
+				Component.literal(displayName(profession) + " " + displayName(rank) + suffix));
 		CompoundTag data = new CompoundTag();
 		data.putString("technology", technology);
 		data.putString("profession", profession);
@@ -67,6 +71,12 @@ public final class ModItems {
 		data.putBoolean("translated", translated);
 		stack.set(DataComponents.CUSTOM_DATA, CustomData.of(data));
 		return stack;
+	}
+
+	private static String displayName(String value) {
+		return java.util.Arrays.stream(value.split("_"))
+				.map(part -> Character.toUpperCase(part.charAt(0)) + part.substring(1))
+				.collect(java.util.stream.Collectors.joining(" "));
 	}
 
 	private static boolean give(ServerPlayer player, ItemStack stack) {
