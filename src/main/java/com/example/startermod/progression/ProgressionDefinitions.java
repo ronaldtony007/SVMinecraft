@@ -17,7 +17,7 @@ public final class ProgressionDefinitions {
 	private static final Set<Identifier> TOOLSMITH_IRON_RECIPES = recipes(
 			"iron_pickaxe", "iron_axe", "iron_shovel", "iron_hoe",
 			"golden_pickaxe", "golden_axe", "golden_shovel", "golden_hoe",
-			"bucket", "shears", "blast_furnace");
+			"bucket", "shears", "flint_and_steel", "blast_furnace");
 	private static final Set<Identifier> TOOLSMITH_DIAMOND_RECIPES = recipes(
 			"diamond_pickaxe", "diamond_axe", "diamond_shovel", "diamond_hoe");
 	private static final Set<Identifier> WEAPONSMITH_STONE_RECIPES = recipes("stone_sword", "stone_spear", "furnace");
@@ -76,6 +76,8 @@ public final class ProgressionDefinitions {
 	private static final Set<Identifier> FLETCHER_BOW_AND_ARROW_RECIPES = recipes("bow", "arrow");
 	private static final Set<Identifier> FLETCHER_CROSSBOW_RECIPES = recipes("crossbow");
 	private static final Set<Identifier> FLETCHER_TIPPED_ARROW_RECIPES = recipes("tipped_arrow");
+	private static final Set<Identifier> LIBRARIAN_BOOK_RECIPES = recipes("paper", "book", "bookshelf");
+	private static final Set<Identifier> ENCHANTING_RECIPES = recipes("enchanting_table");
 
 	private static final List<ProgressionStep> STEPS = java.util.stream.Stream.concat(
 			BLACKSMITH_PROFESSIONS.stream()
@@ -90,7 +92,8 @@ public final class ProgressionDefinitions {
 							3, 5, Items.DIAMOND, "Diamond", 16, recipesFor(profession, "diamond"))
 			).stream()),
 			java.util.stream.Stream.concat(foodSteps().stream(),
-					java.util.stream.Stream.concat(shepherdSteps().stream(), fletcherSteps().stream())))
+					java.util.stream.Stream.concat(shepherdSteps().stream(),
+							java.util.stream.Stream.concat(fletcherSteps().stream(), librarianSteps().stream()))))
 			.toList();
 
 	private static List<ProgressionStep> foodSteps() {
@@ -158,6 +161,14 @@ public final class ProgressionDefinitions {
 				new ProgressionStep(TechnologyId.FLETCHER_TIPPED_ARROWS, KnowledgeId.FLETCHER_TIPPED_ARROWS,
 						"fletcher", 3, 5, Items.AIR, "None", 0, FLETCHER_TIPPED_ARROW_RECIPES)
 		);
+	}
+
+	private static List<ProgressionStep> librarianSteps() {
+		return List.of(
+				new ProgressionStep(TechnologyId.LIBRARIAN_BOOKS, KnowledgeId.LIBRARIAN_BOOKS,
+						"librarian", 1, 1, Items.AIR, "None", 0, LIBRARIAN_BOOK_RECIPES),
+				new ProgressionStep(TechnologyId.ENCHANTING, KnowledgeId.ENCHANTING,
+						"librarian", 1, 2, Items.OBSIDIAN, "Obsidian Blocks", 4, ENCHANTING_RECIPES));
 	}
 
 	private ProgressionDefinitions() {

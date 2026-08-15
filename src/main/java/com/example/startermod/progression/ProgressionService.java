@@ -332,14 +332,16 @@ public final class ProgressionService {
 	}
 
 	public static void addKnowledgeScrollTrades(Villager villager) {
-		if (!BlacksmithEligibility.isProgressionEligible(villager)) {
+		if (!BlacksmithEligibility.isProgressionEligible(villager)
+				|| BlacksmithEligibility.isLibrarian(villager)) {
 			return;
 		}
 		String profession = BlacksmithEligibility.professionName(villager);
 		VillagerProgress progress = getVillagerProgress(villager);
 		for (ProgressionStep step : ProgressionDefinitions.forProfession(profession)) {
 			if (!progress.hasTechnology(step.technologyId())
-					|| step.technologyId().equals(TechnologyId.STONEWORKING)) {
+					|| step.technologyId().equals(TechnologyId.STONEWORKING)
+					|| step.toRank() == 1) {
 				continue;
 			}
 			ItemStack scroll = ModItems.knowledgeScroll(step.technologyId(), profession,

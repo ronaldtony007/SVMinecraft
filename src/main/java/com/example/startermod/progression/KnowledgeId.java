@@ -23,6 +23,8 @@ public final class KnowledgeId {
 	public static final Identifier FLETCHER_BOW_AND_ARROWS = StarterMod.id("bow_and_arrows");
 	public static final Identifier FLETCHER_CROSSBOW = StarterMod.id("crossbow");
 	public static final Identifier FLETCHER_TIPPED_ARROWS = StarterMod.id("tipped_arrows");
+	public static final Identifier LIBRARIAN_BOOKS = StarterMod.id("librarian_books");
+	public static final Identifier ENCHANTING = StarterMod.id("enchanting");
 
 	private KnowledgeId() {
 	}

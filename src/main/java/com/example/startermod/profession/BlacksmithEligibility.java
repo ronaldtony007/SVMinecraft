@@ -12,7 +12,8 @@ public final class BlacksmithEligibility {
 	}
 
 	public static boolean isProgressionEligible(Villager villager) {
-		return isBlacksmithingProfession(villager) || isFoodProfession(villager) || isFletcher(villager);
+		return isBlacksmithingProfession(villager) || isFoodProfession(villager)
+				|| isFletcher(villager) || isLibrarian(villager);
 	}
 
 	public static boolean isRankOnlyProfession(Villager villager) {

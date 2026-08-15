@@ -31,6 +31,8 @@ Shepherds provide rank-based color knowledge. The vanilla White Bed recipe is al
 
 Fletchers provide ranged-combat progression rather than a renewable emerald source. The vanilla Stick-to-Emerald trade is removed. Apprentice requires 3 String + 3 Sticks and unlocks Bow and Arrow crafting, Journeyman unlocks Crossbow crafting, and Master unlocks Tipped Arrow crafting. These crafting recipes are gated without affecting loot or mob drops.
 
+Librarians unlock Paper, Book, and Bookshelf recipes on their first Novice interaction. After reaching Apprentice, they require 4 Obsidian Blocks to unlock Enchanting, which gates the Enchanting Table recipe and enchanted-book Anvil operations server-side. Later Librarian ranks and trades remain vanilla.
+
 ## Requirements
 
 - JDK 25
@@ -85,5 +87,6 @@ To test the real loop:
 - `CraftingMenuMixin` is the final server-side crafting safety check.
 - Shepherd dye, colored-bed, banner, and painting recipes are gated both in the recipe book and in the server-side crafting result.
 - Fletcher bow, arrow, crossbow, and tipped-arrow recipes use the same recipe-book and server-side crafting gates; Fletcher Stick-to-Emerald offers are removed from vanilla trade generation.
+- Librarian Paper, Book, Bookshelf, and Enchanting Table recipes use the same persisted player-feature gates; enchanted-book Anvil operations require the persisted Enchanting feature server-side.
 
 See `PROGRESSION_FILE_MAP.md` for the file connection map.

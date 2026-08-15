@@ -10,7 +10,9 @@
 		"VillagerTradesMixin",
 		"VillagerProgressionMixin",
 		"VillagerTradeGateMixin",
-		"RecipeBookGateMixin"
+		"RecipeBookGateMixin",
+		"LibrarianAnvilGateMixin",
+		"ItemCombinerMenuMixin"
 	],
 	"injectors": {
 		"defaultRequire": 1
