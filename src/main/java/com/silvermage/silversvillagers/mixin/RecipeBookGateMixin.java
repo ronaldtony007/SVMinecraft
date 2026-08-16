@@ -1,5 +1,6 @@
 package com.silvermage.silversvillagers.mixin;
 
+import java.util.Collection;
 import java.util.List;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -9,6 +10,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 import com.silvermage.silversvillagers.recipe.RecipeProgression;
 
@@ -20,6 +22,15 @@ public abstract class RecipeBookGateMixin {
 		return recipeIds.stream()
 				.filter(recipe -> !RecipeProgression.isGated(recipe.identifier())
 						|| RecipeProgression.isUnlocked(player, recipe.identifier()))
+				.toList();
+	}
+
+	@ModifyVariable(method = "awardRecipes", at = @At("HEAD"), argsOnly = true, name = "recipes")
+	private Collection<RecipeHolder<?>> silversvillagers$filterLockedRecipeHolders(
+			Collection<RecipeHolder<?>> recipes) {
+		ServerPlayer player = (ServerPlayer) (Object) this;
+		return recipes.stream()
+				.filter(recipe -> !RecipeProgression.isLocked(player, recipe))
 				.toList();
 	}
 }

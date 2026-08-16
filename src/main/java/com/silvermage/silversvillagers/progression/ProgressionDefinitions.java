@@ -18,7 +18,7 @@ public final class ProgressionDefinitions {
 	private static final Set<Identifier> TOOLSMITH_IRON_RECIPES = recipes(
 			"iron_pickaxe", "iron_axe", "iron_shovel", "iron_hoe",
 			"golden_pickaxe", "golden_axe", "golden_shovel", "golden_hoe",
-			"bucket", "shears", "flint_and_steel", "blast_furnace");
+			"bucket", "shears", "flint_and_steel", "blast_furnace", "crafter");
 	private static final Set<Identifier> TOOLSMITH_DIAMOND_RECIPES = recipes(
 			"diamond_pickaxe", "diamond_axe", "diamond_shovel", "diamond_hoe");
 	private static final Set<Identifier> WEAPONSMITH_STONE_RECIPES = recipes("stone_sword", "stone_spear", "furnace");

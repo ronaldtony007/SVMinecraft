@@ -9,6 +9,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.SingleRecipeInput;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.item.crafting.RecipeHolder;
 
 import com.silvermage.silversvillagers.progression.PlayerProgressionRecipeId;
 import com.silvermage.silversvillagers.progression.ProgressionDefinitions;
@@ -87,6 +88,11 @@ public final class RecipeProgression {
 			Identifier feature = featureFor(step);
 			return feature != null && step.playerRecipes().contains(recipeId) && progress.hasFeature(feature);
 		});
+	}
+
+	public static boolean isLocked(ServerPlayer player, RecipeHolder<?> recipe) {
+		return recipe != null && isGated(recipe.id().identifier())
+				&& !isUnlocked(player, recipe.id().identifier());
 	}
 
 	public static boolean isCampfireInputUnlocked(ServerPlayer player, ItemStack input) {

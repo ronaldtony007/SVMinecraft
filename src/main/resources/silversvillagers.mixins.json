@@ -5,6 +5,7 @@
 	"mixins": [
 		"ItemCombinerMenuAccess",
 		"CraftingMenuMixin",
+		"CrafterBlockMixin",
 		"CampfireBlockEntityMixin",
 		"ContainerInputGateMixin",
 		"FurnaceInputGateMixin",
