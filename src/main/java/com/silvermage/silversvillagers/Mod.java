@@ -41,7 +41,7 @@ public final class Mod implements ModInitializer {
 					|| ProgressionService.getPlayerProgress(serverPlayer).hasFeature(PlayerProgressionRecipeId.CLERIC_NETHER_ACCESS)) {
 				return InteractionResult.PASS;
 			}
-			serverPlayer.sendSystemMessage(Component.literal("A Cleric must unlock Nether access before a portal can be lit."));
+			player.sendSystemMessage(Component.literal("A Cleric must unlock Nether access before a portal can be lit."));
 			return InteractionResult.FAIL;
 		});
 	}

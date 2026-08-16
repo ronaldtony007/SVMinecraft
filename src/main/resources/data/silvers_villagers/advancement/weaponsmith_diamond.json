@@ -3,7 +3,7 @@
   "display": {
     "icon": { "id": "minecraft:diamond" },
     "title": { "text": "Weaponsmith: Diamond Age" },
-    "description": { "text": "Complete Diamondworking with a Weaponsmith" },
+    "description": { "text": "Learn Diamondworking with a Weaponsmith" },
     "frame": "task",
     "announce_to_chat": true,
     "show_toast": true,

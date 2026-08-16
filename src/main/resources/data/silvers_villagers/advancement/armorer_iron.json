@@ -3,7 +3,7 @@
   "display": {
     "icon": { "id": "minecraft:iron_ingot" },
     "title": { "text": "Armorer: Iron Age" },
-    "description": { "text": "Complete Ironworking and Goldworking with an Armorer" },
+    "description": { "text": "Learn Ironworking and Goldworking with an Armorer" },
     "frame": "task",
     "announce_to_chat": true,
     "show_toast": true,

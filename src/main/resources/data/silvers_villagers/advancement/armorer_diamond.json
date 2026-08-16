@@ -3,7 +3,7 @@
   "display": {
     "icon": { "id": "minecraft:diamond" },
     "title": { "text": "Armorer: Diamond Age" },
-    "description": { "text": "Complete Diamondworking with an Armorer" },
+    "description": { "text": "Learn Diamondworking with an Armorer" },
     "frame": "task",
     "announce_to_chat": true,
     "show_toast": true,

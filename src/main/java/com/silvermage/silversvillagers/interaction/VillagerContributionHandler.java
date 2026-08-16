@@ -27,14 +27,14 @@ public final class VillagerContributionHandler {
 			if (player.getItemInHand(hand).is(ModItems.TRANSLATED_KNOWLEDGE_SCROLL)) {
 				ItemStack scroll = player.getItemInHand(hand);
 				if (!ProgressionService.completeScrollUnlock(serverPlayer, villager, scroll)) {
-					serverPlayer.sendSystemMessage(Component.literal("This villager cannot learn that knowledge yet, or already knows it."));
+					player.sendSystemMessage(Component.literal("This villager cannot learn that knowledge yet, or already knows it."));
 					return InteractionResult.SUCCESS;
 				}
 
 				if (!player.isCreative()) {
 					player.getItemInHand(hand).shrink(1);
 				}
-				serverPlayer.sendSystemMessage(Component.literal("The villager accepted the translated scroll."));
+				player.sendSystemMessage(Component.literal("The villager accepted the translated scroll."));
 				return InteractionResult.SUCCESS;
 			}
 
@@ -50,7 +50,7 @@ public final class VillagerContributionHandler {
 			}
 
 			if (!ProgressionService.contributeResource(serverPlayer, villager, stack.getItem(), 1)) {
-				serverPlayer.sendSystemMessage(Component.literal("This villager is not requesting that material right now."));
+				player.sendSystemMessage(Component.literal("This villager is not requesting that material right now."));
 				return InteractionResult.SUCCESS;
 			}
 

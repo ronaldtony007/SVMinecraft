@@ -25,14 +25,14 @@ public final class LibrarianTranslationHandler {
 			String profession = ModItems.scrollProfession(scroll);
 			String rank = ModItems.scrollRank(scroll);
 			if (technology.isEmpty() || profession.isEmpty() || rank.isEmpty()) {
-				serverPlayer.sendSystemMessage(Component.literal("This scroll has no identifiable progression knowledge."));
+				player.sendSystemMessage(Component.literal("This scroll has no identifiable progression knowledge."));
 				return InteractionResult.SUCCESS;
 			}
 			if (!player.isCreative()) {
 				scroll.shrink(1);
 			}
 			ModItems.giveTranslatedKnowledgeScroll(serverPlayer, technology, profession, rank);
-			serverPlayer.sendSystemMessage(Component.literal("The Librarian translated the scroll."));
+			player.sendSystemMessage(Component.literal("The Librarian translated the scroll."));
 			return InteractionResult.SUCCESS;
 		});
 	}

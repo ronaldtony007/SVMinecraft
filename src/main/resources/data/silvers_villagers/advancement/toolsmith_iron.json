@@ -3,7 +3,7 @@
   "display": {
     "icon": { "id": "minecraft:iron_ingot" },
     "title": { "text": "Toolsmith: Iron Age" },
-    "description": { "text": "Complete Ironworking and Goldworking with a Toolsmith" },
+    "description": { "text": "Learn Ironworking and Goldworking with a Toolsmith" },
     "frame": "task",
     "announce_to_chat": true,
     "show_toast": true,
