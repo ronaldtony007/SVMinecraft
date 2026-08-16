@@ -3,10 +3,11 @@
 	"package": "com.silvermage.silversvillagers.mixin",
 	"compatibilityLevel": "JAVA_25",
 	"mixins": [
+		"ItemCombinerMenuAccess",
 		"CraftingMenuMixin",
 		"CampfireBlockEntityMixin",
+		"ContainerInputGateMixin",
 		"FurnaceInputGateMixin",
-		"FurnaceQuickMoveGateMixin",
 		"VillagerTradesMixin",
 		"VillagerProgressionMixin",
 		"VillagerTradeGateMixin",

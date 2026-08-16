@@ -17,8 +17,8 @@ import com.silvermage.silversvillagers.recipe.RecipeProgression;
 @Mixin(CampfireBlockEntity.class)
 public final class CampfireBlockEntityMixin {
 	@Inject(method = "placeFood", at = @At("HEAD"), cancellable = true)
-	private void startermod$gateLockedFood(ServerLevel level, LivingEntity entity, ItemStack stack,
-			CallbackInfoReturnable<Boolean> cir) {
+	private void silversvillagers$gateLockedFood(ServerLevel level, LivingEntity entity, ItemStack stack,
+												 CallbackInfoReturnable<Boolean> cir) {
 		if (entity instanceof ServerPlayer player && !RecipeProgression.isCampfireInputUnlocked(player, stack)) {
 			cir.setReturnValue(false);
 		}

@@ -1,6 +1,7 @@
 package com.silvermage.silversvillagers.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -20,7 +21,7 @@ import com.silvermage.silversvillagers.recipe.RecipeProgression;
 @Mixin(CraftingMenu.class)
 public final class CraftingMenuMixin {
 	@Inject(method = "slotChangedCraftingGrid", at = @At("TAIL"))
-	private static void startermod$gateLockedRecipe(
+	private static void silversvillagers$gateLockedRecipe(
 			AbstractContainerMenu menu,
 			ServerLevel level,
 			Player player,
@@ -34,6 +35,7 @@ public final class CraftingMenuMixin {
 		}
 	}
 
+	@Unique
 	private static boolean isLockedRecipe(RecipeHolder<?> recipe, ServerPlayer player) {
 		return recipe != null && RecipeProgression.isGated(recipe.id().identifier())
 				&& !RecipeProgression.isUnlocked(player, recipe.id().identifier());

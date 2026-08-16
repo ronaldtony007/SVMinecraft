@@ -15,7 +15,7 @@ import com.silvermage.silversvillagers.progression.ProgressionService;
 @Mixin(AbstractVillager.class)
 public abstract class VillagerProgressionMixin {
 	@Inject(method = "notifyTrade", at = @At("HEAD"))
-	private void startermod$progressAfterTrade(MerchantOffer offer, CallbackInfo info) {
+	private void silversvillagers$progressAfterTrade(MerchantOffer offer, CallbackInfo info) {
 		if (!((Object) this instanceof Villager villager)) {
 			return;
 		}

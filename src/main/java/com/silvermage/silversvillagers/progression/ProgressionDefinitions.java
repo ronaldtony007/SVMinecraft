@@ -3,6 +3,7 @@ package com.silvermage.silversvillagers.progression;
 import java.util.List;
 import java.util.Set;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.Items;
@@ -84,7 +85,7 @@ public final class ProgressionDefinitions {
 
 	private static final List<ProgressionStep> STEPS = java.util.stream.Stream.concat(
 			BLACKSMITH_PROFESSIONS.stream()
-			.flatMap(profession -> List.of(
+			.flatMap(profession -> Stream.of(
 					new ProgressionStep(TechnologyId.STONEWORKING, KnowledgeId.STONEWORKING, profession,
 							1, 1, Items.STONE, "Stone", 0, recipesFor(profession, "stone")),
 					new ProgressionStep(TechnologyId.COPPERWORKING, KnowledgeId.COPPERWORKING, profession,
@@ -93,7 +94,7 @@ public final class ProgressionDefinitions {
 							2, 3, Items.IRON_INGOT, "Iron", 32, recipesFor(profession, "iron")),
 					new ProgressionStep(TechnologyId.DIAMONDWORKING, KnowledgeId.DIAMONDWORKING, profession,
 							3, 5, Items.DIAMOND, "Diamond", 16, recipesFor(profession, "diamond"))
-			).stream()),
+			)),
 			java.util.stream.Stream.concat(foodSteps().stream(),
 					java.util.stream.Stream.concat(shepherdSteps().stream(),
 							java.util.stream.Stream.concat(fletcherSteps().stream(),
@@ -190,9 +191,6 @@ public final class ProgressionDefinitions {
 						"leatherworker", 3, 4, Items.AIR, "None", 0, LEATHERWORKER_EXPERT_RECIPES),
 				new ProgressionStep(TechnologyId.LEATHERWORKER_MASTER_SADDLE, KnowledgeId.LEATHERWORKER_MASTER_SADDLE,
 						"leatherworker", 4, 5, Items.AIR, "None", 0, LEATHERWORKER_MASTER_RECIPES));
-	}
-
-	private ProgressionDefinitions() {
 	}
 
 	public static List<ProgressionStep> forProfession(String profession) {

@@ -7,11 +7,7 @@ import net.minecraft.server.level.ServerPlayer;
 
 import com.silvermage.silversvillagers.progression.ProgressionService;
 
-/** Checks rank milestones independently from the villager's trade UI lifecycle. */
 public final class VillagerMilestoneHandler {
-	private VillagerMilestoneHandler() {
-	}
-
 	public static void initialize() {
 		UseEntityCallback.EVENT.register((player, level, hand, entity, hitResult) -> {
 			if (player instanceof ServerPlayer serverPlayer && entity instanceof Villager villager) {

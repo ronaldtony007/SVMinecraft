@@ -18,8 +18,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.core.registries.BuiltInRegistries;
 
-import com.silvermage.silversvillagers.interaction.VillagerLocator;
-import com.silvermage.silversvillagers.profession.BlacksmithEligibility;
+import com.silvermage.silversvillagers.profession.VillagerEligibility;
 import com.silvermage.silversvillagers.progression.ProgressionService;
 import com.silvermage.silversvillagers.progression.ProgressionStep;
 import com.silvermage.silversvillagers.progression.VillagerProgress;
@@ -65,7 +64,7 @@ public final class VillagerProgressCommand {
 		if (villager == null) return 0;
 
 		VillagerProgress progress = ProgressionService.getVillagerProgress(villager);
-		context.getSource().sendSuccess(() -> Component.literal("Profession: " + BlacksmithEligibility.professionName(villager)), false);
+		context.getSource().sendSuccess(() -> Component.literal("Profession: " + VillagerEligibility.professionName(villager)), false);
 		context.getSource().sendSuccess(() -> Component.literal("Rank: " + VillagerRankRequirement.levelName(villager.getVillagerData().level())), false);
 		context.getSource().sendSuccess(() -> Component.literal("Trade tier unlocked: "
 				+ VillagerRankRequirement.levelName(progress.unlockedTradeLevel())), false);
@@ -107,7 +106,7 @@ public final class VillagerProgressCommand {
 		ServerPlayer player = context.getSource().getPlayerOrException();
 		Villager villager = requireVillager(context);
 		if (villager == null) return 0;
-		var step = ProgressionService.nextStep(villager);
+		Optional<ProgressionStep> step = ProgressionService.nextStep(villager);
 		String resource = StringArgumentType.getString(context, "resource").toLowerCase(java.util.Locale.ROOT);
 		var requiredMaterial = step.flatMap(value -> value.requirements().keySet().stream()
 				.filter(item -> BuiltInRegistries.ITEM.getKey(item).getPath().equals(resource)).findFirst());
@@ -134,7 +133,7 @@ public final class VillagerProgressCommand {
 		Villager villager = requireVillager(context);
 		if (villager == null) return 0;
 		Identifier technology = Identifier.fromNamespaceAndPath("silvers_villagers", StringArgumentType.getString(context, "technology"));
-		var step = ProgressionService.nextStep(villager);
+		Optional<ProgressionStep> step = ProgressionService.nextStep(villager);
 		if (!ProgressionService.unlockTechnology(villager, technology) || step.isEmpty()) {
 			return fail(context, "That technology is not the current progression step.");
 		}

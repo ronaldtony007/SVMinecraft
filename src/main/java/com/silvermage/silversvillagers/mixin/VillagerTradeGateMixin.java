@@ -14,19 +14,19 @@ import com.silvermage.silversvillagers.progression.ProgressionService;
 @Mixin(Villager.class)
 public abstract class VillagerTradeGateMixin {
 	@Inject(method = "updateTrades", at = @At("HEAD"))
-	private void startermod$removeScrollTrades(ServerLevel level, CallbackInfo info) {
+	private void silversvillagers$removeScrollTrades(ServerLevel level, CallbackInfo info) {
 		ProgressionService.removeKnowledgeScrollTrades((Villager) (Object) this);
 	}
 
 	@Inject(method = "updateTrades", at = @At("TAIL"))
-	private void startermod$appendScrollTrades(ServerLevel level, CallbackInfo info) {
+	private void silversvillagers$appendScrollTrades(ServerLevel level, CallbackInfo info) {
 		Villager villager = (Villager) (Object) this;
 		ProgressionService.addKnowledgeScrollTrades(villager);
 		ProgressionService.removeFletcherStickTrade(villager);
 	}
 
 	@Inject(method = "startTrading", at = @At("HEAD"))
-	private void startermod$normalizeScrollTrades(Player player, CallbackInfo info) {
+	private void silversvillagers$normalizeScrollTrades(Player player, CallbackInfo info) {
 		Villager villager = (Villager) (Object) this;
 		ProgressionService.normalizeKnowledgeScrollTrades(villager);
 		ProgressionService.removeFletcherStickTrade(villager);

@@ -2,6 +2,7 @@ package com.silvermage.silversvillagers.item;
 
 import java.util.function.Function;
 
+import com.silvermage.silversvillagers.Mod;
 import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.core.registries.Registries;
@@ -17,28 +18,19 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.component.CustomData;
 
-import com.silvermage.silversvillagers.StarterMod;
-
 public final class ModItems {
 	public static final ResourceKey<Item> KNOWLEDGE_SCROLL_KEY = create("knowledge_scroll");
 	public static final Item KNOWLEDGE_SCROLL = register(KNOWLEDGE_SCROLL_KEY, Item::new, new Item.Properties().stacksTo(1));
 	public static final ResourceKey<Item> TRANSLATED_KNOWLEDGE_SCROLL_KEY = create("translated_knowledge_scroll");
 	public static final Item TRANSLATED_KNOWLEDGE_SCROLL = register(TRANSLATED_KNOWLEDGE_SCROLL_KEY, Item::new, new Item.Properties().stacksTo(1));
 
-	private ModItems() {
-	}
-
 	private static ResourceKey<Item> create(String name) {
-		return ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(StarterMod.MOD_ID, name));
+		return ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mod.MOD_ID, name));
 	}
 
 	private static Item register(ResourceKey<Item> key, Function<Item.Properties, Item> factory, Item.Properties properties) {
 		Item item = factory.apply(properties.setId(key));
 		return Registry.register(BuiltInRegistries.ITEM, key, item);
-	}
-
-	public static boolean giveTranslatedKnowledgeScroll(ServerPlayer player, String technology, String profession, String rank) {
-		return give(player, translatedKnowledgeScroll(technology, profession, rank));
 	}
 
 	public static ItemStack knowledgeScroll(Identifier technology, String profession, String rank) {
@@ -84,13 +76,13 @@ public final class ModItems {
 				.collect(java.util.stream.Collectors.joining(" "));
 	}
 
-	private static boolean give(ServerPlayer player, ItemStack stack) {
+	public static void giveTranslatedKnowledgeScroll(ServerPlayer player, String technology, String profession, String rank) {
+		ItemStack stack = translatedKnowledgeScroll(technology, profession, rank);
 		if (player.getInventory().add(stack)) {
-			return true;
+			return;
 		}
 
 		player.drop(stack, false);
-		return true;
 	}
 
 	public static void initialize() {

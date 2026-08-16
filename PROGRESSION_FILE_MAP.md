@@ -274,10 +274,10 @@ The real loop is resource -> local progression -> emerald scroll trade -> Librar
 
 ## Adding a New Progression
 
-1. Add IDs in `TechnologyId`, `KnowledgeId`, and `PlayerFeatureId`.
+1. Add IDs in `TechnologyId`, `KnowledgeId`, and `PlayerProgressionRecipeId`.
 2. Add a `ProgressionStep` and its recipe IDs in `ProgressionDefinitions`.
 3. Confirm the profession's recipe and cooking gates are covered by `RecipeProgression`.
-4. Confirm the profession is accepted by `BlacksmithEligibility`.
+4. Confirm the profession is accepted by `VillagerEligibility`.
 5. Test resource contribution, scroll trade availability, Librarian translation, translated-scroll acceptance, recipes, and vanilla trade unlocking.
 
 Do not add a new interaction handler for Stoneworking, Ironworking, or Diamondworking. The point of `ProgressionStep` is that those use the same engine.

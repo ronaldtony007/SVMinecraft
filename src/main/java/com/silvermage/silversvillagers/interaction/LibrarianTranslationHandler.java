@@ -8,17 +8,14 @@ import net.minecraft.world.item.ItemStack;
 
 import net.minecraft.server.level.ServerPlayer;
 import com.silvermage.silversvillagers.item.ModItems;
-import com.silvermage.silversvillagers.profession.BlacksmithEligibility;
+import com.silvermage.silversvillagers.profession.VillagerEligibility;
 
 public final class LibrarianTranslationHandler {
-	private LibrarianTranslationHandler() {
-	}
-
 	public static void initialize() {
 		UseEntityCallback.EVENT.register((player, level, hand, entity, hitResult) -> {
 			if (!(player instanceof ServerPlayer serverPlayer)
 				|| !(entity instanceof Villager librarian)
-					|| !BlacksmithEligibility.isLibrarian(librarian)
+					|| !VillagerEligibility.isLibrarian(librarian)
 				|| !player.getItemInHand(hand).is(ModItems.KNOWLEDGE_SCROLL)) {
 				return InteractionResult.PASS;
 			}

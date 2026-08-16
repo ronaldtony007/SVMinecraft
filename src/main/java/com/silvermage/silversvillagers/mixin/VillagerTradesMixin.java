@@ -9,5 +9,5 @@ import net.minecraft.world.entity.npc.villager.Villager;
 @Mixin(Villager.class)
 public interface VillagerTradesMixin {
 	@Invoker("updateTrades")
-	void startermod$updateTrades(ServerLevel level);
+	void silversvillagers$updateTrades(ServerLevel level);
 }

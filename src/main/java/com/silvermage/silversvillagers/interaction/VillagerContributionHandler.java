@@ -1,5 +1,6 @@
 package com.silvermage.silversvillagers.interaction;
 
+import com.silvermage.silversvillagers.progression.ProgressionStep;
 import net.fabricmc.fabric.api.event.player.UseEntityCallback;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionResult;
@@ -12,10 +13,9 @@ import net.minecraft.server.level.ServerLevel;
 import com.silvermage.silversvillagers.progression.ProgressionService;
 import com.silvermage.silversvillagers.item.ModItems;
 
-public final class VillagerContributionHandler {
-	private VillagerContributionHandler() {
-	}
+import java.util.Optional;
 
+public final class VillagerContributionHandler {
 	public static void initialize() {
 		UseEntityCallback.EVENT.register((player, level, hand, entity, hitResult) -> {
 			if (!(player instanceof ServerPlayer serverPlayer)
@@ -38,7 +38,7 @@ public final class VillagerContributionHandler {
 				return InteractionResult.SUCCESS;
 			}
 
-			var step = ProgressionService.nextStep(villager);
+			Optional<ProgressionStep> step = ProgressionService.nextStep(villager);
 			if (step.isPresent() && step.get().requirements().values().stream().allMatch(amount -> amount == 0)) {
 				ProgressionService.requestNextResource(serverPlayer, villager);
 				step = ProgressionService.nextStep(villager);

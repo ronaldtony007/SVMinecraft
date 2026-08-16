@@ -1,9 +1,6 @@
 package com.silvermage.silversvillagers.progression;
 
 public final class VillagerRankRequirement {
-	private VillagerRankRequirement() {
-	}
-
 	public static String levelName(int level) {
 		return switch (level) {
 			case 1 -> "Novice";

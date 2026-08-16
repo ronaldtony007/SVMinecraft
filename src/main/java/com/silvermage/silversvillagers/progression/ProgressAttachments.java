@@ -1,26 +1,21 @@
-package com.silvermage.silversvillagers.persistence;
+package com.silvermage.silversvillagers.progression;
 
 import net.fabricmc.fabric.api.attachment.v1.AttachmentRegistry;
 import net.fabricmc.fabric.api.attachment.v1.AttachmentType;
 import net.minecraft.resources.Identifier;
 
-import com.silvermage.silversvillagers.StarterMod;
-import com.silvermage.silversvillagers.progression.PlayerProgress;
-import com.silvermage.silversvillagers.progression.VillagerProgress;
+import com.silvermage.silversvillagers.Mod;
 
-public final class ModAttachments {
+public final class ProgressAttachments {
 	public static final AttachmentType<VillagerProgress> VILLAGER_PROGRESS = AttachmentRegistry.create(
-			Identifier.fromNamespaceAndPath(StarterMod.MOD_ID, "villager_progress"),
+			Identifier.fromNamespaceAndPath(Mod.MOD_ID, "villager_progress"),
 			builder -> builder.initializer(VillagerProgress::empty).persistent(VillagerProgress.CODEC)
 	);
 
 	public static final AttachmentType<PlayerProgress> PLAYER_PROGRESS = AttachmentRegistry.create(
-			Identifier.fromNamespaceAndPath(StarterMod.MOD_ID, "player_progress"),
+			Identifier.fromNamespaceAndPath(Mod.MOD_ID, "player_progress"),
 			builder -> builder.initializer(PlayerProgress::empty).persistent(PlayerProgress.CODEC)
 	);
-
-	private ModAttachments() {
-	}
 
 	public static void initialize() {
 		// Force attachment registration before saved entities are loaded.
